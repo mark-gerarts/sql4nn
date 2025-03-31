@@ -1,0 +1,1159 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>15. Geometric representation &#8212; SQL4NN - Validation and expressive querying of models as data</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '3.3 Integral - Geometric representation';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="16. Saliency" href="4.1%20Saliency.html" />
+    <link rel="prev" title="14. Handling duplicate breakpoints" href="3.2%20Integral%20-%20duplicate%20breakpoints.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">SQL4NN - Validation and expressive querying of models as data</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    0. Intro
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Evaluating a Neural Network</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="1.1%20Eval%20-%20basic%20eval.html">1. Basic eval function</a></li>
+<li class="toctree-l1"><a class="reference internal" href="1.2%20Eval%20-%20multiple%20i-o.html">2. Multiple input and output neurons</a></li>
+<li class="toctree-l1"><a class="reference internal" href="1.3%20Eval%20-%20multiple%20input%20sets.html">3. Multiple input sets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="1.4%20Eval%20-%20recursive.html">4. Recursive queries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="1.5%20Eval%20-%20graph%20database.html">5. Graph databases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="1.6%20Eval%20-%20Performance%20v2.html">6. Performance Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="1.7%20Eval%20-%20UDF.html">7. Table as UDF input</a></li>
+<li class="toctree-l1"><a class="reference internal" href="1.8%20Eval%20-%20CNN.html">8. Eval on a CNN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="1.9%20Eval%20-%20Multiple%20networks.html">9. Multiple networks</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Model queries</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="2.0%20Basic%20model%20queries.html">10. Basic model queries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="2%20Querying%20useless%20neurons.html">11. Querying useless neurons</a></li>
+<li class="toctree-l1"><a class="reference internal" href="2.1%20Querying%20useless%20neurons%20-%20performance.html">12. Querying useless neurons - performance</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Calculating integrals</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="3.1%20Integral.html">13. Calculating integrals in SQL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="3.2%20Integral%20-%20duplicate%20breakpoints.html">14. Handling duplicate breakpoints</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">15. Geometric representation</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Saliency</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="4.1%20Saliency.html">16. Saliency</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Verification</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="5.0%20NN%20verification.html">17. Neural Network Verification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="5.1%20NNV%20with%20SQL.html">18. NNV with SQL</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Aside</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="A.1%20Aside%20-%20DuckDB%20bugreport.html">19. DuckDB performance issues</a></li>
+<li class="toctree-l1"><a class="reference internal" href="A.2%20Aside%20-%20ONNX.html">20. ONNX</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/3.3 Integral - Geometric representation.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Geometric representation</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-network">15.1. The network</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-query">15.2. The query</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-query-with-extra-start-end-breakpoint">15.3. The query, with extra start/end breakpoint</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#using-the-geometric-representation-to-calculate-the-integral">15.4. Using the geometric representation to calculate the integral</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#getting-the-geometry-of-a-more-interesting-function">15.5. Getting the geometry of a more interesting function</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="geometric-representation">
+<h1><span class="section-number">15. </span>Geometric representation<a class="headerlink" href="#geometric-representation" title="Link to this heading">#</a></h1>
+<p>We saw how we can calculate the integral of the function represented by the
+neural network in a SQL query. Taking a step back, we can instead construct the
+geometric representation of the network’s function (i.e. the breakpoints and
+their slopes). Once we have this, we can calculate the integral on top of it.</p>
+<section id="the-network">
+<h2><span class="section-number">15.1. </span>The network<a class="headerlink" href="#the-network" title="Link to this heading">#</a></h2>
+<p>We’ll use the same function and network from <a class="reference internal" href="3.1%20Integral.html"><span class="std std-doc">the integral query’s discussion</span></a>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">torch.onnx</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">utils.duckdb</span> <span class="k">as</span> <span class="nn">db</span>
+<span class="kn">import</span> <span class="nn">utils.nn</span> <span class="k">as</span> <span class="nn">nn</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">math</span>
+
+<span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">110033</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">0</span>
+    <span class="k">elif</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="mi">5</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">x</span>
+    <span class="k">elif</span> <span class="mi">5</span> <span class="o">&lt;=</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">10</span><span class="o">-</span><span class="n">x</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">0</span>
+
+<span class="n">x_train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
+<span class="n">y_train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">x_train</span><span class="p">])</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">ReLUFNN</span><span class="p">(</span><span class="n">input_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">output_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">hidden_size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">num_hidden_layers</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">nn</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">save_path</span><span class="o">=</span><span class="s2">&quot;models/integral_geometric.pt&quot;</span><span class="p">)</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+<span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+    <span class="n">predicted</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Original function&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">predicted</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Neural Network approximation&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="n">db</span><span class="o">.</span><span class="n">load_pytorch_model_into_db</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/7b5c239a737fa9a8fa6d0dc59e0d761b9f45af7c8cba030c9a16a114459af595.png" src="_images/7b5c239a737fa9a8fa6d0dc59e0d761b9f45af7c8cba030c9a16a114459af595.png" />
+</div>
+</div>
+</section>
+<section id="the-query">
+<h2><span class="section-number">15.2. </span>The query<a class="headerlink" href="#the-query" title="Link to this heading">#</a></h2>
+<p>The following query is a straightforward adaptation from <a class="reference internal" href="3.1%20Integral.html"><span class="std std-doc">the integral
+query</span></a> where we instead simply retain the x and y
+coordinates of the breakpoints, and the slope to the next breakpoint.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">query</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">WITH</span>
+<span class="s2">-- Node selectors</span>
+<span class="s2">input_nodes AS (</span>
+<span class="s2">    SELECT id</span>
+<span class="s2">    FROM node</span>
+<span class="s2">    WHERE id NOT IN</span>
+<span class="s2">    (SELECT dst FROM edge)</span>
+<span class="s2">),</span>
+<span class="s2">output_nodes AS (</span>
+<span class="s2">    SELECT id</span>
+<span class="s2">    FROM node</span>
+<span class="s2">    WHERE id NOT IN</span>
+<span class="s2">    (SELECT src FROM edge)</span>
+<span class="s2">),</span>
+<span class="s2">hidden_nodes AS (</span>
+<span class="s2">    SELECT id</span>
+<span class="s2">    FROM node</span>
+<span class="s2">    WHERE id NOT IN</span>
+<span class="s2">    (</span>
+<span class="s2">        SELECT * FROM input_nodes</span>
+<span class="s2">        UNION</span>
+<span class="s2">        SELECT * FROM output_nodes</span>
+<span class="s2">    )</span>
+<span class="s2">),</span>
+<span class="s2">breakpoints AS (</span>
+<span class="s2">    SELECT</span>
+<span class="s2">        n.id,</span>
+<span class="s2">        (-n.bias) / e.weight AS break_x, -- -b(u) / w(in1, u)</span>
+<span class="s2">        ROW_NUMBER() OVER (ORDER BY (-n.bias) / e.weight) AS row_number</span>
+<span class="s2">    FROM node n</span>
+<span class="s2">    JOIN edge e ON e.dst = n.id</span>
+<span class="s2">    JOIN input_nodes i ON e.src = i.id</span>
+<span class="s2">    JOIN hidden_nodes h ON h.id = n.id</span>
+<span class="s2">    WHERE e.weight &lt;&gt; 0</span>
+<span class="s2">    -- GROUP BY to avoid duplicate breakpoints.</span>
+<span class="s2">    GROUP BY break_x, n.id</span>
+<span class="s2">    ORDER BY break_x</span>
+<span class="s2">),</span>
+
+<span class="s2">-- Eval query</span>
+<span class="s2">input_values AS (</span>
+<span class="s2">    SELECT break_x AS input_value FROM breakpoints</span>
+<span class="s2">),</span>
+<span class="s2">t1 AS (</span>
+<span class="s2">    SELECT</span>
+<span class="s2">        v.input_value,</span>
+<span class="s2">        GREATEST(</span>
+<span class="s2">            0,</span>
+<span class="s2">            n.bias + SUM(e.weight * v.input_value)</span>
+<span class="s2">        ) AS t1,</span>
+<span class="s2">        e.dst AS id</span>
+<span class="s2">    FROM edge e</span>
+<span class="s2">    JOIN input_nodes i ON i.id = e.src</span>
+<span class="s2">    JOIN node n ON e.dst = n.id</span>
+<span class="s2">    CROSS JOIN input_values v</span>
+<span class="s2">    GROUP BY v.input_value, e.dst, n.bias</span>
+<span class="s2">),</span>
+<span class="s2">output_values AS (</span>
+<span class="s2">    SELECT</span>
+<span class="s2">        t1.input_value,</span>
+<span class="s2">        n.bias + SUM(e.weight * t1.t1) AS output_value,</span>
+<span class="s2">        e.dst AS output_node_id</span>
+<span class="s2">    FROM edge e</span>
+<span class="s2">    JOIN t1 ON t1.id = e.src</span>
+<span class="s2">    JOIN node n ON e.dst = n.id</span>
+<span class="s2">    GROUP BY t1.input_value, e.dst, n.bias</span>
+<span class="s2">),</span>
+
+<span class="s2">-- Calculating breakpoints and their slopes.</span>
+<span class="s2">breakpoint_pairs AS (</span>
+<span class="s2">    SELECT</span>
+<span class="s2">        u1.break_x AS u1_break_x,</span>
+<span class="s2">        u2.break_x AS u2_break_x,</span>
+<span class="s2">        e1.output_value AS u1_break_y,</span>
+<span class="s2">        e2.output_value AS u2_break_y</span>
+<span class="s2">    FROM breakpoints u1</span>
+<span class="s2">    JOIN breakpoints u2 ON u1.row_number = u2.row_number - 1</span>
+<span class="s2">    JOIN output_values e1 ON u1.break_x = e1.input_value</span>
+<span class="s2">    JOIN output_values e2 ON u2.break_x = e2.input_value</span>
+<span class="s2">),</span>
+<span class="s2">points_and_slopes AS (</span>
+<span class="s2">    SELECT</span>
+<span class="s2">        u1_break_x AS x,</span>
+<span class="s2">        u1_break_y AS y,</span>
+<span class="s2">        -- (y2 - y1) / (x2 - x1)</span>
+<span class="s2">        (u2_break_y - u1_break_y) / (u2_break_x - u1_break_x) AS slope</span>
+<span class="s2">    FROM breakpoint_pairs</span>
+<span class="s2">)</span>
+<span class="s2">SELECT * FROM points_and_slopes</span>
+<span class="s2">ORDER BY x;</span>
+<span class="s2">&quot;&quot;&quot;</span>
+
+<span class="n">db</span><span class="o">.</span><span class="n">con</span><span class="o">.</span><span class="n">sql</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>┌────────────────┬─────────────────────────┬─────────────────────┐
+│       x        │            y            │        slope        │
+│     float      │         double          │       double        │
+├────────────────┼─────────────────────────┼─────────────────────┤
+│ -1.0918143e-05 │ -1.0492646325133137e-05 │  1.0000308991376736 │
+│      4.9998784 │       5.000033373403085 │ -0.9999513442997937 │
+└────────────────┴─────────────────────────┴─────────────────────┘
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="the-query-with-extra-start-end-breakpoint">
+<h2><span class="section-number">15.3. </span>The query, with extra start/end breakpoint<a class="headerlink" href="#the-query-with-extra-start-end-breakpoint" title="Link to this heading">#</a></h2>
+<p>To fully capture the network, we need an artificial extra start and end
+breakpoint. DuckDB supports positive and negative infinity, but the calculations
+result into NaNs. Instead, we’ll take a point at an arbitrary distance before
+the first and after the last breakpoint. In our case, we take 10 as the
+distance.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">query</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">WITH</span>
+<span class="s2">input_nodes AS (</span>
+<span class="s2">    SELECT id</span>
+<span class="s2">    FROM node</span>
+<span class="s2">    WHERE id NOT IN</span>
+<span class="s2">    (SELECT dst FROM edge)</span>
+<span class="s2">),</span>
+<span class="s2">output_nodes AS (</span>
+<span class="s2">    SELECT id</span>
+<span class="s2">    FROM node</span>
+<span class="s2">    WHERE id NOT IN</span>
+<span class="s2">    (SELECT src FROM edge)</span>
+<span class="s2">),</span>
+<span class="s2">hidden_nodes AS (</span>
+<span class="s2">    SELECT id</span>
+<span class="s2">    FROM node</span>
+<span class="s2">    WHERE id NOT IN</span>
+<span class="s2">    (</span>
+<span class="s2">        SELECT * FROM input_nodes</span>
+<span class="s2">        UNION</span>
+<span class="s2">        SELECT * FROM output_nodes</span>
+<span class="s2">    )</span>
+<span class="s2">),</span>
+<span class="s2">breakpoint_values AS (</span>
+<span class="s2">    SELECT</span>
+<span class="s2">        (-n.bias) / e.weight AS break_x,</span>
+<span class="s2">    FROM node n</span>
+<span class="s2">    JOIN edge e ON e.dst = n.id</span>
+<span class="s2">    JOIN input_nodes i ON e.src = i.id</span>
+<span class="s2">    JOIN hidden_nodes h ON h.id = n.id</span>
+<span class="s2">    WHERE e.weight &lt;&gt; 0</span>
+<span class="s2">    GROUP BY break_x, n.id</span>
+<span class="s2">    ORDER BY break_x</span>
+<span class="s2">),</span>
+<span class="s2">breakpoints_unordered AS (</span>
+<span class="s2">    (SELECT break_x FROM breakpoint_values)</span>
+<span class="s2">    UNION</span>
+<span class="s2">    (SELECT MIN(break_x) - 10.0 AS break_x FROM breakpoint_values)</span>
+<span class="s2">    UNION</span>
+<span class="s2">    (SELECT MAX(break_x) + 10.0 AS break_x FROM breakpoint_values)</span>
+<span class="s2">),</span>
+<span class="s2">breakpoints AS (</span>
+<span class="s2">    SELECT</span>
+<span class="s2">        break_x,</span>
+<span class="s2">        ROW_NUMBER() OVER (ORDER BY break_x) AS row_number</span>
+<span class="s2">    FROM breakpoints_unordered</span>
+<span class="s2">),</span>
+
+<span class="s2">input_values AS (</span>
+<span class="s2">    SELECT break_x AS input_value FROM breakpoints</span>
+<span class="s2">),</span>
+<span class="s2">t1 AS (</span>
+<span class="s2">    SELECT</span>
+<span class="s2">        v.input_value,</span>
+<span class="s2">        GREATEST(</span>
+<span class="s2">            0,</span>
+<span class="s2">            n.bias + SUM(e.weight * v.input_value)</span>
+<span class="s2">        ) AS t1,</span>
+<span class="s2">        e.dst AS id</span>
+<span class="s2">    FROM edge e</span>
+<span class="s2">    JOIN input_nodes i ON i.id = e.src</span>
+<span class="s2">    JOIN node n ON e.dst = n.id</span>
+<span class="s2">    CROSS JOIN input_values v</span>
+<span class="s2">    GROUP BY v.input_value, e.dst, n.bias</span>
+<span class="s2">),</span>
+<span class="s2">output_values AS (</span>
+<span class="s2">    SELECT</span>
+<span class="s2">        t1.input_value,</span>
+<span class="s2">        n.bias + SUM(e.weight * t1.t1) AS output_value,</span>
+<span class="s2">        e.dst AS output_node_id</span>
+<span class="s2">    FROM edge e</span>
+<span class="s2">    JOIN t1 ON t1.id = e.src</span>
+<span class="s2">    JOIN node n ON e.dst = n.id</span>
+<span class="s2">    GROUP BY t1.input_value, e.dst, n.bias</span>
+<span class="s2">),</span>
+
+<span class="s2">breakpoint_pairs AS (</span>
+<span class="s2">    SELECT</span>
+<span class="s2">        u1.break_x AS u1_break_x,</span>
+<span class="s2">        u2.break_x AS u2_break_x,</span>
+<span class="s2">        e1.output_value AS u1_break_y,</span>
+<span class="s2">        e2.output_value AS u2_break_y</span>
+<span class="s2">    FROM breakpoints u1</span>
+<span class="s2">    JOIN breakpoints u2 ON u1.row_number = u2.row_number - 1</span>
+<span class="s2">    JOIN output_values e1 ON u1.break_x = e1.input_value</span>
+<span class="s2">    JOIN output_values e2 ON u2.break_x = e2.input_value</span>
+<span class="s2">),</span>
+<span class="s2">points_and_slopes AS (</span>
+<span class="s2">    SELECT</span>
+<span class="s2">        u1_break_x AS x,</span>
+<span class="s2">        u1_break_y AS y,</span>
+<span class="s2">        (u2_break_y - u1_break_y) / (u2_break_x - u1_break_x) AS slope</span>
+<span class="s2">    FROM breakpoint_pairs</span>
+<span class="s2">)</span>
+<span class="s2">SELECT * FROM points_and_slopes</span>
+<span class="s2">ORDER BY x;</span>
+<span class="s2">&quot;&quot;&quot;</span>
+<span class="n">db</span><span class="o">.</span><span class="n">con</span><span class="o">.</span><span class="n">sql</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>┌────────────────┬─────────────────────────┬────────────────────────┐
+│       x        │            y            │         slope          │
+│     float      │         double          │         double         │
+├────────────────┼─────────────────────────┼────────────────────────┤
+│    -10.0000105 │  -0.0003988036515920612 │ 3.8831100526692806e-05 │
+│ -1.0918143e-05 │ -1.0492646325133137e-05 │     1.0000308991376736 │
+│      4.9998784 │       5.000033373403085 │    -0.9999513442997937 │
+│      10.000131 │   2.441732067381963e-05 │                    0.0 │
+└────────────────┴─────────────────────────┴────────────────────────┘
+</pre></div>
+</div>
+</div>
+</div>
+<p>With this, we fully capture the network. As an example application, let’s create
+a plot of the model using only this geometric information.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">db</span><span class="o">.</span><span class="n">con</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">)</span><span class="o">.</span><span class="n">df</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>x</th>
+      <th>y</th>
+      <th>slope</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>-10.000010</td>
+      <td>-0.000399</td>
+      <td>0.000039</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>-0.000011</td>
+      <td>-0.000010</td>
+      <td>1.000031</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>4.999878</td>
+      <td>5.000033</td>
+      <td>-0.999951</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>10.000131</td>
+      <td>0.000024</td>
+      <td>0.000000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result_df</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">con</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">)</span><span class="o">.</span><span class="n">df</span><span class="p">()</span>
+
+<span class="n">x_values</span> <span class="o">=</span> <span class="n">result_df</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+<span class="n">y_values</span> <span class="o">=</span> <span class="n">result_df</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+<span class="n">slopes</span> <span class="o">=</span> <span class="n">result_df</span><span class="p">[</span><span class="s1">&#39;slope&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+
+<span class="n">x_plot</span> <span class="o">=</span> <span class="p">[</span><span class="n">x_values</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+<span class="n">y_plot</span> <span class="o">=</span> <span class="p">[</span><span class="n">y_values</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">slopes</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+    <span class="n">next_x</span> <span class="o">=</span> <span class="n">x_values</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="n">delta_x</span> <span class="o">=</span> <span class="n">next_x</span> <span class="o">-</span> <span class="n">x_plot</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">delta_y</span> <span class="o">=</span> <span class="n">slopes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">delta_x</span>
+    <span class="n">y_next</span> <span class="o">=</span> <span class="n">y_plot</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">delta_y</span>
+
+    <span class="n">x_plot</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">next_x</span><span class="p">)</span>
+    <span class="n">y_plot</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y_next</span><span class="p">)</span>
+
+<span class="c1"># Also show the next 10 units of the last slope</span>
+<span class="n">last_slope</span> <span class="o">=</span> <span class="n">slopes</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">last_x</span> <span class="o">=</span> <span class="n">x_plot</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">last_y</span> <span class="o">=</span> <span class="n">y_plot</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">extend_x</span> <span class="o">=</span> <span class="n">last_x</span> <span class="o">+</span> <span class="mi">10</span>
+<span class="n">extend_y</span> <span class="o">=</span> <span class="n">last_y</span> <span class="o">+</span> <span class="n">last_slope</span> <span class="o">*</span> <span class="p">(</span><span class="n">extend_x</span> <span class="o">-</span> <span class="n">last_x</span><span class="p">)</span>
+<span class="n">x_plot</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">extend_x</span><span class="p">)</span>
+<span class="n">y_plot</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">extend_y</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_plot</span><span class="p">,</span> <span class="n">y_plot</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;b&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;y&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Reconstruction from breakpoints and slopes&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/95877038a6916ef3da58b4c4bc1e74bf0e48ba38ac2db5e9fd5e878bb84545a0.png" src="_images/95877038a6916ef3da58b4c4bc1e74bf0e48ba38ac2db5e9fd5e878bb84545a0.png" />
+</div>
+</div>
+</section>
+<section id="using-the-geometric-representation-to-calculate-the-integral">
+<h2><span class="section-number">15.4. </span>Using the geometric representation to calculate the integral<a class="headerlink" href="#using-the-geometric-representation-to-calculate-the-integral" title="Link to this heading">#</a></h2>
+<p>With the geometric representation at hand, it becomes trivial to calculate the
+integral of the function.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">integral_query</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">WITH</span>
+<span class="s2">input_nodes AS (</span>
+<span class="s2">    SELECT id</span>
+<span class="s2">    FROM node</span>
+<span class="s2">    WHERE id NOT IN</span>
+<span class="s2">    (SELECT dst FROM edge)</span>
+<span class="s2">),</span>
+<span class="s2">output_nodes AS (</span>
+<span class="s2">    SELECT id</span>
+<span class="s2">    FROM node</span>
+<span class="s2">    WHERE id NOT IN</span>
+<span class="s2">    (SELECT src FROM edge)</span>
+<span class="s2">),</span>
+<span class="s2">hidden_nodes AS (</span>
+<span class="s2">    SELECT id</span>
+<span class="s2">    FROM node</span>
+<span class="s2">    WHERE id NOT IN</span>
+<span class="s2">    (</span>
+<span class="s2">        SELECT * FROM input_nodes</span>
+<span class="s2">        UNION</span>
+<span class="s2">        SELECT * FROM output_nodes</span>
+<span class="s2">    )</span>
+<span class="s2">),</span>
+<span class="s2">breakpoint_values AS (</span>
+<span class="s2">    SELECT</span>
+<span class="s2">        (-n.bias) / e.weight AS break_x,</span>
+<span class="s2">    FROM node n</span>
+<span class="s2">    JOIN edge e ON e.dst = n.id</span>
+<span class="s2">    JOIN input_nodes i ON e.src = i.id</span>
+<span class="s2">    JOIN hidden_nodes h ON h.id = n.id</span>
+<span class="s2">    WHERE e.weight &lt;&gt; 0</span>
+<span class="s2">    GROUP BY break_x, n.id</span>
+<span class="s2">    ORDER BY break_x</span>
+<span class="s2">),</span>
+<span class="s2">breakpoints_unordered AS (</span>
+<span class="s2">    (SELECT break_x FROM breakpoint_values)</span>
+<span class="s2">    UNION</span>
+<span class="s2">    (SELECT MIN(break_x) - 10.0 AS break_x FROM breakpoint_values)</span>
+<span class="s2">    UNION</span>
+<span class="s2">    (SELECT MAX(break_x) + 10.0 AS break_x FROM breakpoint_values)</span>
+<span class="s2">),</span>
+<span class="s2">breakpoints AS (</span>
+<span class="s2">    SELECT</span>
+<span class="s2">        break_x,</span>
+<span class="s2">        ROW_NUMBER() OVER (ORDER BY break_x) AS row_number</span>
+<span class="s2">    FROM breakpoints_unordered</span>
+<span class="s2">),</span>
+
+<span class="s2">input_values AS (</span>
+<span class="s2">    SELECT break_x AS input_value FROM breakpoints</span>
+<span class="s2">),</span>
+<span class="s2">t1 AS (</span>
+<span class="s2">    SELECT</span>
+<span class="s2">        v.input_value,</span>
+<span class="s2">        GREATEST(</span>
+<span class="s2">            0,</span>
+<span class="s2">            n.bias + SUM(e.weight * v.input_value)</span>
+<span class="s2">        ) AS t1,</span>
+<span class="s2">        e.dst AS id</span>
+<span class="s2">    FROM edge e</span>
+<span class="s2">    JOIN input_nodes i ON i.id = e.src</span>
+<span class="s2">    JOIN node n ON e.dst = n.id</span>
+<span class="s2">    CROSS JOIN input_values v</span>
+<span class="s2">    GROUP BY v.input_value, e.dst, n.bias</span>
+<span class="s2">),</span>
+<span class="s2">output_values AS (</span>
+<span class="s2">    SELECT</span>
+<span class="s2">        t1.input_value,</span>
+<span class="s2">        n.bias + SUM(e.weight * t1.t1) AS output_value,</span>
+<span class="s2">        e.dst AS output_node_id</span>
+<span class="s2">    FROM edge e</span>
+<span class="s2">    JOIN t1 ON t1.id = e.src</span>
+<span class="s2">    JOIN node n ON e.dst = n.id</span>
+<span class="s2">    GROUP BY t1.input_value, e.dst, n.bias</span>
+<span class="s2">),</span>
+<span class="s2">breakpoint_pairs AS (</span>
+<span class="s2">    SELECT</span>
+<span class="s2">        u1.break_x AS u1_break_x,</span>
+<span class="s2">        u2.break_x AS u2_break_x,</span>
+<span class="s2">        e1.output_value AS u1_break_y,</span>
+<span class="s2">        e2.output_value AS u2_break_y</span>
+<span class="s2">    FROM breakpoints u1</span>
+<span class="s2">    JOIN breakpoints u2 ON u1.row_number = u2.row_number - 1</span>
+<span class="s2">    JOIN output_values e1 ON u1.break_x = e1.input_value</span>
+<span class="s2">    JOIN output_values e2 ON u2.break_x = e2.input_value</span>
+<span class="s2">),</span>
+<span class="s2">points_and_slopes AS (</span>
+<span class="s2">    SELECT</span>
+<span class="s2">        u1_break_x AS x,</span>
+<span class="s2">        u1_break_y AS y,</span>
+<span class="s2">        (u2_break_y - u1_break_y) / (u2_break_x - u1_break_x) AS slope</span>
+<span class="s2">    FROM breakpoint_pairs</span>
+<span class="s2">),</span>
+
+<span class="s2">-- Given points_and_slopes, we can calculate the integral from them.</span>
+<span class="s2">points_and_slopes_with_next AS (</span>
+<span class="s2">    SELECT</span>
+<span class="s2">        x,</span>
+<span class="s2">        y,</span>
+<span class="s2">        slope,</span>
+<span class="s2">        LEAD(x) OVER (ORDER BY x) AS next_x</span>
+<span class="s2">    FROM points_and_slopes</span>
+<span class="s2">)</span>
+
+<span class="s2">SELECT</span>
+<span class="s2">    SUM(((y + (y + slope * (next_x - x))) / 2) * (next_x - x)) AS integral</span>
+<span class="s2">FROM</span>
+<span class="s2">    points_and_slopes_with_next</span>
+<span class="s2">WHERE next_x IS NOT NULL</span>
+<span class="s2">&quot;&quot;&quot;</span>
+<span class="n">db</span><span class="o">.</span><span class="n">con</span><span class="o">.</span><span class="n">sql</span><span class="p">(</span><span class="n">integral_query</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>┌───────────────────┐
+│     integral      │
+│      double       │
+├───────────────────┤
+│ 24.99850925482483 │
+└───────────────────┘
+</pre></div>
+</div>
+</div>
+</div>
+<p>The trick here is in the last 2 parts:</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="n">points_and_slopes_with_next</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="k">SELECT</span>
+<span class="w">        </span><span class="n">x</span><span class="p">,</span>
+<span class="w">        </span><span class="n">y</span><span class="p">,</span>
+<span class="w">        </span><span class="n">slope</span><span class="p">,</span>
+<span class="w">        </span><span class="n">LEAD</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="n">OVER</span><span class="w"> </span><span class="p">(</span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">next_x</span>
+<span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="n">points_and_slopes</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Here we select the breakpoints as pairs again, using SQL’s <code class="docutils literal notranslate"><span class="pre">LEAD</span></code> function to
+get the next value according to some ordering.</p>
+<p>With this in hand, we calculate the actual integral:</p>
+<div class="highlight-SQL notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span>
+<span class="w">    </span><span class="k">SUM</span><span class="p">(((</span><span class="n">y</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="p">(</span><span class="n">y</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">slope</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="n">next_x</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">x</span><span class="p">)))</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="n">next_x</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">x</span><span class="p">))</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">integral</span>
+<span class="k">FROM</span>
+<span class="w">    </span><span class="n">points_and_slopes_with_next</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">next_x</span><span class="w"> </span><span class="k">IS</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span>
+</pre></div>
+</div>
+<p>This relies on the formula:</p>
+<div class="math notranslate nohighlight">
+\[
+A = \frac{y_1 + y_{i+1}}{2} \cdot (x_{i+1} - x_i)
+\]</div>
+<p>We could technically fetch <span class="math notranslate nohighlight">\(y_{i+1}\)</span> from the <code class="docutils literal notranslate"><span class="pre">points_and_slopes</span></code> CTE as well,
+but we can also use the slope to calculate it, which we do:</p>
+<div class="math notranslate nohighlight">
+\[
+y_{i+1} = y_i + slope \cdot (x_{i+1} - x_i)
+\]</div>
+</section>
+<section id="getting-the-geometry-of-a-more-interesting-function">
+<h2><span class="section-number">15.5. </span>Getting the geometry of a more interesting function<a class="headerlink" href="#getting-the-geometry-of-a-more-interesting-function" title="Link to this heading">#</a></h2>
+<p>Our function is pretty trivial. Let’s instead see if we can train a network to
+learn <span class="math notranslate nohighlight">\(y = sin(x)\)</span> and get the geometry of that.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">x_train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">10000</span><span class="p">)</span>
+<span class="n">y_train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">x_train</span><span class="p">])</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">ReLUFNN</span><span class="p">(</span><span class="n">input_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">output_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">hidden_size</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">num_hidden_layers</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">nn</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">750</span><span class="p">,</span> <span class="n">save_path</span><span class="o">=</span><span class="s2">&quot;models/integral_geometric_sine.pt&quot;</span><span class="p">)</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+<span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+    <span class="n">predicted</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Original function&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">predicted</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Neural Network approximation&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="n">db</span><span class="o">.</span><span class="n">load_pytorch_model_into_db</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/4dfa73747388b0da5274148e6a859a26acdbd26a1e1bae1eaa6e563102ebcb3a.png" src="_images/4dfa73747388b0da5274148e6a859a26acdbd26a1e1bae1eaa6e563102ebcb3a.png" />
+</div>
+</div>
+<p>We can see that the trained function is not perfect, but still a pretty good
+match. Let’s get the geometric representation of it.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result_df</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">con</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">)</span><span class="o">.</span><span class="n">df</span><span class="p">()</span>
+
+<span class="n">x_values</span> <span class="o">=</span> <span class="n">result_df</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+<span class="n">y_values</span> <span class="o">=</span> <span class="n">result_df</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+<span class="n">slopes</span> <span class="o">=</span> <span class="n">result_df</span><span class="p">[</span><span class="s1">&#39;slope&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+
+<span class="n">x_plot</span> <span class="o">=</span> <span class="p">[</span><span class="n">x_values</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+<span class="n">y_plot</span> <span class="o">=</span> <span class="p">[</span><span class="n">y_values</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">slopes</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+    <span class="n">next_x</span> <span class="o">=</span> <span class="n">x_values</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="n">delta_x</span> <span class="o">=</span> <span class="n">next_x</span> <span class="o">-</span> <span class="n">x_plot</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">delta_y</span> <span class="o">=</span> <span class="n">slopes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">delta_x</span>
+    <span class="n">y_next</span> <span class="o">=</span> <span class="n">y_plot</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">delta_y</span>
+
+    <span class="n">x_plot</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">next_x</span><span class="p">)</span>
+    <span class="n">y_plot</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y_next</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_plot</span><span class="p">,</span> <span class="n">y_plot</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;b&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;y&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Reconstruction from breakpoints and slopes&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/7082f780295f4e71a54b13c563334943e0a1c468d4eb93778c3ffe7f3c6b8966.png" src="_images/7082f780295f4e71a54b13c563334943e0a1c468d4eb93778c3ffe7f3c6b8966.png" />
+</div>
+</div>
+<p>This graph is a bit messy, because some breakpoints are located out of the area
+we trained our sine on. Let’s zoom in a bit.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_plot</span><span class="p">,</span> <span class="n">y_plot</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Reconstruction&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;y&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Reconstruction from breakpoints and slopes&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="o">-</span><span class="mf">1.5</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/ed9c69af886a0e3efeb82a294e15a4259087a7ef74d497c4648ad7f40d9441b7.png" src="_images/ed9c69af886a0e3efeb82a294e15a4259087a7ef74d497c4648ad7f40d9441b7.png" />
+</div>
+</div>
+<p>This plot shows how we nicely reconstruct the output of the neural network.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="3.2%20Integral%20-%20duplicate%20breakpoints.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title"><span class="section-number">14. </span>Handling duplicate breakpoints</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="4.1%20Saliency.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><span class="section-number">16. </span>Saliency</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-network">15.1. The network</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-query">15.2. The query</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-query-with-extra-start-end-breakpoint">15.3. The query, with extra start/end breakpoint</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#using-the-geometric-representation-to-calculate-the-integral">15.4. Using the geometric representation to calculate the integral</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#getting-the-geometry-of-a-more-interesting-function">15.5. Getting the geometry of a more interesting function</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Mark Gerarts & Juno Steegmans & Jan Van den Bussche
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

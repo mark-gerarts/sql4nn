@@ -1,0 +1,1563 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>17. Neural Network Verification &#8212; SQL4NN - Validation and expressive querying of models as data</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '5.0 NN verification';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="18. NNV with SQL" href="5.1%20NNV%20with%20SQL.html" />
+    <link rel="prev" title="16. Saliency" href="4.1%20Saliency.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">SQL4NN - Validation and expressive querying of models as data</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    0. Intro
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Evaluating a Neural Network</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="1.1%20Eval%20-%20basic%20eval.html">1. Basic eval function</a></li>
+<li class="toctree-l1"><a class="reference internal" href="1.2%20Eval%20-%20multiple%20i-o.html">2. Multiple input and output neurons</a></li>
+<li class="toctree-l1"><a class="reference internal" href="1.3%20Eval%20-%20multiple%20input%20sets.html">3. Multiple input sets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="1.4%20Eval%20-%20recursive.html">4. Recursive queries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="1.5%20Eval%20-%20graph%20database.html">5. Graph databases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="1.6%20Eval%20-%20Performance%20v2.html">6. Performance Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="1.7%20Eval%20-%20UDF.html">7. Table as UDF input</a></li>
+<li class="toctree-l1"><a class="reference internal" href="1.8%20Eval%20-%20CNN.html">8. Eval on a CNN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="1.9%20Eval%20-%20Multiple%20networks.html">9. Multiple networks</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Model queries</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="2.0%20Basic%20model%20queries.html">10. Basic model queries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="2%20Querying%20useless%20neurons.html">11. Querying useless neurons</a></li>
+<li class="toctree-l1"><a class="reference internal" href="2.1%20Querying%20useless%20neurons%20-%20performance.html">12. Querying useless neurons - performance</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Calculating integrals</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="3.1%20Integral.html">13. Calculating integrals in SQL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="3.2%20Integral%20-%20duplicate%20breakpoints.html">14. Handling duplicate breakpoints</a></li>
+<li class="toctree-l1"><a class="reference internal" href="3.3%20Integral%20-%20Geometric%20representation.html">15. Geometric representation</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Saliency</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="4.1%20Saliency.html">16. Saliency</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Verification</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">17. Neural Network Verification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="5.1%20NNV%20with%20SQL.html">18. NNV with SQL</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Aside</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="A.1%20Aside%20-%20DuckDB%20bugreport.html">19. DuckDB performance issues</a></li>
+<li class="toctree-l1"><a class="reference internal" href="A.2%20Aside%20-%20ONNX.html">20. ONNX</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/5.0 NN verification.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Neural Network Verification</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#z3">17.1. Z3</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#a-basic-network">17.1.1. A Basic Network</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-real-implementation-sine">17.1.2. The Real Implementation (Sine)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#marabou">17.2. Marabou</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#simple-network">17.2.1. Simple network</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sine">17.2.2. Sine</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#vehicle">17.3. Vehicle</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="neural-network-verification">
+<h1><span class="section-number">17. </span>Neural Network Verification<a class="headerlink" href="#neural-network-verification" title="Link to this heading">#</a></h1>
+<p>This notebook experiments with a few neural network verification techniques.
+This notebook was mostly for ourselves, to get acquainted with some existing
+tools.</p>
+<p>Some inspiration was taken from <a class="github reference external" href="https://github.com/DDiekmann/Applied-Verification-Lab-Neural-Networks">DDiekmann/Applied-Verification-Lab-Neural-Networks</a>.</p>
+<section id="z3">
+<h2><span class="section-number">17.1. </span>Z3<a class="headerlink" href="#z3" title="Link to this heading">#</a></h2>
+<p>We first start with a generic SMT solver, Z3.</p>
+<section id="a-basic-network">
+<h3><span class="section-number">17.1.1. </span>A Basic Network<a class="headerlink" href="#a-basic-network" title="Link to this heading">#</a></h3>
+<p>Before we dive in the “real” example (the sine function), we’ll start with our
+tried and trusted basic network.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">utils.nn</span> <span class="k">as</span> <span class="nn">nn</span>
+<span class="kn">import</span> <span class="nn">torch.nn.functional</span> <span class="k">as</span> <span class="nn">F</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">z3</span>
+<span class="kn">import</span> <span class="nn">utils.duckdb</span> <span class="k">as</span> <span class="nn">db</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">ReLUFNN</span><span class="p">(</span><span class="n">input_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">hidden_size</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">num_hidden_layers</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">output_size</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">load_state_dict</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;models/basic_eval.pt&quot;</span><span class="p">,</span> <span class="n">weights_only</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+
+<span class="c1"># So we can debug with queries...</span>
+<span class="n">db</span><span class="o">.</span><span class="n">load_pytorch_model_into_db</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+
+
+<span class="n">x_train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
+<span class="n">predicted</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">predicted</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Neural Network function&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/c05b7767b677351ec2fe447798d9fa9e3c79ea23e2a1471da8821b812b7c99f1.png" src="_images/c05b7767b677351ec2fe447798d9fa9e3c79ea23e2a1471da8821b812b7c99f1.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mf">0.5</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">))</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([0.49924543], dtype=float32)
+</pre></div>
+</div>
+</div>
+</div>
+<p>We want to verify 2 <em>correctness properties</em>, as defined by <a class="reference external" href="https://arxiv.org/abs/2109.10317">Aws
+2021</a>.</p>
+<p><strong>Example 1</strong>: for the input range [-5, 15], f(x) should always be between 0 and 5</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{gather}
+\{ x \geq -5 \land x \leq 15 \} \\
+r \leftarrow f(x) \\
+\{ r \geq 0 \land r \leq 5 \}
+\end{gather}
+\end{split}\]</div>
+<p><strong>Example 2</strong>: Between [0, 5], the function should always be increasing.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{gather}
+\{ x \geq 0 \land x \leq 5 \land x' \geq 0 \land x' \leq 5 \land x &gt; x' \} \\
+r \leftarrow f(x) \\
+r' \leftarrow f(x') \\
+\{ r \geq r' \}
+\end{gather}
+\end{split}\]</div>
+<p>Also for reference, this is the network:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">Image</span>
+<span class="n">Image</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s1">&#39;assets/network.png&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/a7fbb0329eb2e96f6f080037aeaeb78b6531fd732187632514b18529f7256d03.png" src="_images/a7fbb0329eb2e96f6f080037aeaeb78b6531fd732187632514b18529f7256d03.png" />
+</div>
+</div>
+<p>Let’s jump into the first example.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">z3</span><span class="o">.</span><span class="n">Real</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">)</span>
+<span class="n">precondition</span> <span class="o">=</span> <span class="n">z3</span><span class="o">.</span><span class="n">And</span><span class="p">(</span><span class="n">x</span> <span class="o">&gt;=</span> <span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="n">x</span> <span class="o">&lt;=</span> <span class="mi">15</span><span class="p">)</span>
+<span class="n">precondition</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html">x &ge; -5 &and; x &le; 15</div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">r</span> <span class="o">=</span> <span class="n">z3</span><span class="o">.</span><span class="n">Real</span><span class="p">(</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>
+<span class="c1"># We add a small value (0.1) to the bounds we expect, to account for some small</span>
+<span class="c1"># fluctuations.</span>
+<span class="n">postcondition</span> <span class="o">=</span> <span class="n">z3</span><span class="o">.</span><span class="n">And</span><span class="p">(</span><span class="n">r</span> <span class="o">&gt;=</span> <span class="o">-</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">r</span> <span class="o">&lt;=</span> <span class="mf">5.1</span><span class="p">)</span>
+<span class="n">postcondition</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html">r &ge; -1/10 &and; r &le; 51/10</div></div>
+</div>
+<p>Now the hard part: we have to encode the network. This is done according to the
+Aws book. First, we encode the ReLU function:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">ReLU</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+  <span class="k">return</span> <span class="n">z3</span><span class="o">.</span><span class="n">If</span><span class="p">(</span><span class="n">x</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">z3</span><span class="o">.</span><span class="n">RealVal</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Let’s get the weights and biases (by hand, because that’s easiest for such a
+small network)</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">state_dict</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">state_dict</span><span class="p">()</span>
+
+<span class="n">b2</span> <span class="o">=</span> <span class="n">state_dict</span><span class="p">[</span><span class="s1">&#39;linear_relu_stack.0.bias&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+<span class="n">b3</span> <span class="o">=</span> <span class="n">state_dict</span><span class="p">[</span><span class="s1">&#39;linear_relu_stack.0.bias&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+<span class="n">b4</span> <span class="o">=</span> <span class="n">state_dict</span><span class="p">[</span><span class="s1">&#39;linear_relu_stack.2.bias&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+<span class="n">b5</span> <span class="o">=</span> <span class="n">state_dict</span><span class="p">[</span><span class="s1">&#39;linear_relu_stack.2.bias&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+<span class="n">bout</span> <span class="o">=</span> <span class="n">state_dict</span><span class="p">[</span><span class="s1">&#39;linear_relu_stack.4.bias&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+
+<span class="n">wi2</span> <span class="o">=</span> <span class="n">state_dict</span><span class="p">[</span><span class="s1">&#39;linear_relu_stack.0.weight&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+<span class="n">wi3</span> <span class="o">=</span> <span class="n">state_dict</span><span class="p">[</span><span class="s1">&#39;linear_relu_stack.0.weight&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+<span class="n">w24</span> <span class="o">=</span> <span class="n">state_dict</span><span class="p">[</span><span class="s1">&#39;linear_relu_stack.2.weight&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+<span class="n">w25</span> <span class="o">=</span> <span class="n">state_dict</span><span class="p">[</span><span class="s1">&#39;linear_relu_stack.2.weight&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+<span class="n">w34</span> <span class="o">=</span> <span class="n">state_dict</span><span class="p">[</span><span class="s1">&#39;linear_relu_stack.2.weight&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+<span class="n">w35</span> <span class="o">=</span> <span class="n">state_dict</span><span class="p">[</span><span class="s1">&#39;linear_relu_stack.2.weight&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+<span class="n">w4o</span> <span class="o">=</span> <span class="n">state_dict</span><span class="p">[</span><span class="s1">&#39;linear_relu_stack.4.weight&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+<span class="n">w5o</span> <span class="o">=</span> <span class="n">state_dict</span><span class="p">[</span><span class="s1">&#39;linear_relu_stack.4.weight&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>With these values, we can encode the nodes:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># The input node is easy, we already have it defined in the precondition.</span>
+<span class="n">v_in</span> <span class="o">=</span> <span class="n">x</span>
+
+<span class="c1"># Node 2</span>
+<span class="n">v_in_2_0</span> <span class="o">=</span> <span class="n">z3</span><span class="o">.</span><span class="n">Real</span><span class="p">(</span><span class="s1">&#39;v_in_2_0&#39;</span><span class="p">)</span>
+<span class="n">v_o_2</span> <span class="o">=</span> <span class="n">z3</span><span class="o">.</span><span class="n">Real</span><span class="p">(</span><span class="s1">&#39;v_o_2&#39;</span><span class="p">)</span>
+<span class="n">F2</span> <span class="o">=</span> <span class="p">(</span><span class="n">v_o_2</span> <span class="o">==</span> <span class="n">ReLU</span><span class="p">(</span><span class="n">wi2</span> <span class="o">*</span> <span class="n">v_in_2_0</span> <span class="o">+</span> <span class="n">b2</span><span class="p">))</span>
+
+<span class="c1"># Node 3</span>
+<span class="n">v_in_3_0</span> <span class="o">=</span> <span class="n">z3</span><span class="o">.</span><span class="n">Real</span><span class="p">(</span><span class="s1">&#39;v_in_3_0&#39;</span><span class="p">)</span>
+<span class="n">v_o_3</span> <span class="o">=</span> <span class="n">z3</span><span class="o">.</span><span class="n">Real</span><span class="p">(</span><span class="s1">&#39;v_o_3&#39;</span><span class="p">)</span>
+<span class="n">F3</span> <span class="o">=</span> <span class="p">(</span><span class="n">v_o_3</span> <span class="o">==</span> <span class="n">ReLU</span><span class="p">(</span><span class="n">wi3</span> <span class="o">*</span> <span class="n">v_in_3_0</span> <span class="o">+</span> <span class="n">b3</span><span class="p">))</span>
+
+<span class="c1"># Node 4</span>
+<span class="c1"># Gets a bit harder, requires a summation.</span>
+<span class="n">v_in_4_0</span><span class="p">,</span> <span class="n">v_in_4_1</span> <span class="o">=</span> <span class="n">z3</span><span class="o">.</span><span class="n">Reals</span><span class="p">(</span><span class="s1">&#39;v_in_4_0 v_in_4_1&#39;</span><span class="p">)</span>
+<span class="n">v_o_4</span> <span class="o">=</span> <span class="n">z3</span><span class="o">.</span><span class="n">Real</span><span class="p">(</span><span class="s1">&#39;v_o_4&#39;</span><span class="p">)</span>
+<span class="n">F4</span> <span class="o">=</span> <span class="p">(</span><span class="n">v_o_4</span> <span class="o">==</span> <span class="n">ReLU</span><span class="p">(</span><span class="n">z3</span><span class="o">.</span><span class="n">Sum</span><span class="p">([</span><span class="n">w24</span> <span class="o">*</span> <span class="n">v_in_4_0</span><span class="p">,</span> <span class="n">w34</span> <span class="o">*</span> <span class="n">v_in_4_1</span><span class="p">])</span> <span class="o">+</span> <span class="n">b4</span><span class="p">))</span>
+
+<span class="c1"># Node 5</span>
+<span class="n">v_in_5_0</span><span class="p">,</span> <span class="n">v_in_5_1</span> <span class="o">=</span> <span class="n">z3</span><span class="o">.</span><span class="n">Reals</span><span class="p">(</span><span class="s1">&#39;v_in_5_0 v_in_5_1&#39;</span><span class="p">)</span>
+<span class="n">v_o_5</span> <span class="o">=</span> <span class="n">z3</span><span class="o">.</span><span class="n">Real</span><span class="p">(</span><span class="s1">&#39;v_o_5&#39;</span><span class="p">)</span>
+<span class="n">F5</span> <span class="o">=</span> <span class="p">(</span><span class="n">v_o_5</span> <span class="o">==</span> <span class="n">ReLU</span><span class="p">(</span><span class="n">z3</span><span class="o">.</span><span class="n">Sum</span><span class="p">([</span><span class="n">w25</span> <span class="o">*</span> <span class="n">v_in_5_0</span><span class="p">,</span> <span class="n">w35</span> <span class="o">*</span> <span class="n">v_in_5_1</span><span class="p">])</span> <span class="o">+</span> <span class="n">b5</span><span class="p">))</span>
+
+<span class="c1"># Output</span>
+<span class="n">v_in_o_0</span><span class="p">,</span> <span class="n">v_in_o_1</span> <span class="o">=</span> <span class="n">z3</span><span class="o">.</span><span class="n">Reals</span><span class="p">(</span><span class="s1">&#39;v_in_o_0 v_in_o_1&#39;</span><span class="p">)</span>
+<span class="n">v_out</span> <span class="o">=</span> <span class="n">z3</span><span class="o">.</span><span class="n">Real</span><span class="p">(</span><span class="s1">&#39;v_out&#39;</span><span class="p">)</span>
+<span class="n">FO</span> <span class="o">=</span> <span class="p">(</span><span class="n">v_out</span> <span class="o">==</span> <span class="n">z3</span><span class="o">.</span><span class="n">Sum</span><span class="p">([</span><span class="n">w4o</span> <span class="o">*</span> <span class="n">v_in_o_0</span><span class="p">,</span> <span class="n">w5o</span> <span class="o">*</span> <span class="n">v_in_o_1</span><span class="p">])</span> <span class="o">+</span> <span class="n">bout</span><span class="p">)</span>
+
+<span class="n">FV</span> <span class="o">=</span> <span class="n">z3</span><span class="o">.</span><span class="n">And</span><span class="p">(</span><span class="n">F2</span><span class="p">,</span> <span class="n">F3</span><span class="p">,</span> <span class="n">F4</span><span class="p">,</span> <span class="n">F5</span><span class="p">,</span> <span class="n">FO</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>And the edges:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">FE</span> <span class="o">=</span> <span class="n">z3</span><span class="o">.</span><span class="n">And</span><span class="p">([</span>
+    <span class="n">v_in_2_0</span> <span class="o">==</span> <span class="n">v_in</span><span class="p">,</span>
+    <span class="n">v_in_3_0</span> <span class="o">==</span> <span class="n">v_in</span><span class="p">,</span>
+    <span class="n">v_in_4_0</span> <span class="o">==</span> <span class="n">v_o_2</span><span class="p">,</span>
+    <span class="n">v_in_4_1</span> <span class="o">==</span> <span class="n">v_o_3</span><span class="p">,</span>
+    <span class="n">v_in_5_0</span> <span class="o">==</span> <span class="n">v_o_2</span><span class="p">,</span>
+    <span class="n">v_in_5_1</span> <span class="o">==</span> <span class="n">v_o_3</span><span class="p">,</span>
+    <span class="n">v_in_o_0</span> <span class="o">==</span> <span class="n">v_o_4</span><span class="p">,</span>
+    <span class="n">v_in_o_1</span> <span class="o">==</span> <span class="n">v_o_5</span>
+<span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The entire neural network is then encoded as:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">FG</span> <span class="o">=</span> <span class="n">z3</span><span class="o">.</span><span class="n">And</span><span class="p">(</span><span class="n">FV</span><span class="p">,</span> <span class="n">FE</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The entire formula is:</p>
+<p>precondition AND network AND input AND output IMPLIES postcondition</p>
+<p>Which is what we’ll be encoding next.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="n">z3</span><span class="o">.</span><span class="n">And</span><span class="p">([</span>
+    <span class="n">precondition</span><span class="p">,</span>
+    <span class="n">FG</span><span class="p">,</span>
+    <span class="n">v_in</span> <span class="o">==</span> <span class="n">x</span><span class="p">,</span> <span class="c1"># Link input</span>
+    <span class="n">r</span> <span class="o">==</span> <span class="n">v_out</span> <span class="c1"># Link output</span>
+<span class="p">])</span>
+
+<span class="n">correctness_property</span> <span class="o">=</span> <span class="n">z3</span><span class="o">.</span><span class="n">Implies</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">postcondition</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now we can check if the correctness property holds (i.e. it is valid (i.e., it
+is SAT for all possible interpretations)). We do this by checking if the
+negation of the property is UNSAT.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">solver</span> <span class="o">=</span> <span class="n">z3</span><span class="o">.</span><span class="n">Solver</span><span class="p">()</span>
+<span class="n">solver</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">z3</span><span class="o">.</span><span class="n">Not</span><span class="p">(</span><span class="n">correctness_property</span><span class="p">))</span>
+
+<span class="k">if</span> <span class="n">solver</span><span class="o">.</span><span class="n">check</span><span class="p">()</span> <span class="o">==</span> <span class="n">z3</span><span class="o">.</span><span class="n">unsat</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Correctness property holds&quot;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Can&#39;t prove correctness property&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Correctness property holds
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now let’s take the same example, but make the postcondition something that we
+expect to fail:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">postcondition</span> <span class="o">=</span> <span class="n">z3</span><span class="o">.</span><span class="n">And</span><span class="p">(</span><span class="n">r</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">r</span> <span class="o">&lt;=</span> <span class="mf">5.1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">correctness_property</span> <span class="o">=</span> <span class="n">z3</span><span class="o">.</span><span class="n">Implies</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">postcondition</span><span class="p">)</span>
+
+<span class="n">solver</span> <span class="o">=</span> <span class="n">z3</span><span class="o">.</span><span class="n">Solver</span><span class="p">()</span>
+<span class="n">solver</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">z3</span><span class="o">.</span><span class="n">Not</span><span class="p">(</span><span class="n">correctness_property</span><span class="p">))</span>
+
+<span class="k">if</span> <span class="n">solver</span><span class="o">.</span><span class="n">check</span><span class="p">()</span> <span class="o">==</span> <span class="n">z3</span><span class="o">.</span><span class="n">unsat</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Correctness property holds&quot;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Can&#39;t prove correctness property&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Can&#39;t prove correctness property
+</pre></div>
+</div>
+</div>
+</div>
+<p>It fails, as expected. Now let’s try to implement example 2. We obviously need
+adapted pre- and postconditions:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span><span class="p">,</span> <span class="n">x_prime</span> <span class="o">=</span> <span class="n">z3</span><span class="o">.</span><span class="n">Reals</span><span class="p">(</span><span class="s1">&#39;x x_prime&#39;</span><span class="p">)</span>
+<span class="n">precondition</span> <span class="o">=</span> <span class="n">z3</span><span class="o">.</span><span class="n">And</span><span class="p">(</span><span class="n">x</span> <span class="o">&gt;=</span> <span class="mf">0.1</span><span class="p">,</span> <span class="n">x</span> <span class="o">&lt;=</span> <span class="mf">4.9</span><span class="p">,</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="n">x_prime</span><span class="p">)</span>
+
+<span class="n">r</span><span class="p">,</span> <span class="n">r_prime</span> <span class="o">=</span> <span class="n">z3</span><span class="o">.</span><span class="n">Reals</span><span class="p">(</span><span class="s1">&#39;r r_prime&#39;</span><span class="p">)</span>
+<span class="n">postcondition</span> <span class="o">=</span> <span class="n">z3</span><span class="o">.</span><span class="n">And</span><span class="p">(</span><span class="n">r</span> <span class="o">&gt;=</span> <span class="n">r_prime</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>But we also have to encode the additional evaluation on x’. For this we define a
+function to create a graph encoding, so we can reuse it:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">create_graph_encoding</span><span class="p">(</span><span class="n">v_in</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+    <span class="c1"># Node 2</span>
+    <span class="n">v_in_2_0</span> <span class="o">=</span> <span class="n">z3</span><span class="o">.</span><span class="n">Real</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;v_in_2_0</span><span class="si">{</span><span class="n">suffix</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">v_o_2</span> <span class="o">=</span> <span class="n">z3</span><span class="o">.</span><span class="n">Real</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;v_o_2</span><span class="si">{</span><span class="n">suffix</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">F2</span> <span class="o">=</span> <span class="p">(</span><span class="n">v_o_2</span> <span class="o">==</span> <span class="n">ReLU</span><span class="p">(</span><span class="n">wi2</span> <span class="o">*</span> <span class="n">v_in_2_0</span> <span class="o">+</span> <span class="n">b2</span><span class="p">))</span>
+
+    <span class="c1"># Node 3</span>
+    <span class="n">v_in_3_0</span> <span class="o">=</span> <span class="n">z3</span><span class="o">.</span><span class="n">Real</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;v_in_3_0</span><span class="si">{</span><span class="n">suffix</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="n">v_o_3</span> <span class="o">=</span> <span class="n">z3</span><span class="o">.</span><span class="n">Real</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;v_o_3</span><span class="si">{</span><span class="n">suffix</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="n">F3</span> <span class="o">=</span> <span class="p">(</span><span class="n">v_o_3</span> <span class="o">==</span> <span class="n">ReLU</span><span class="p">(</span><span class="n">wi3</span> <span class="o">*</span> <span class="n">v_in_3_0</span> <span class="o">+</span> <span class="n">b3</span><span class="p">))</span>
+
+    <span class="c1"># Node 4</span>
+    <span class="c1"># Gets a bit harder, requires a summation.</span>
+    <span class="n">v_in_4_0</span><span class="p">,</span> <span class="n">v_in_4_1</span> <span class="o">=</span> <span class="n">z3</span><span class="o">.</span><span class="n">Reals</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;v_in_4_0</span><span class="si">{</span><span class="n">suffix</span><span class="si">}</span><span class="s1"> v_in_4_1</span><span class="si">{</span><span class="n">suffix</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="n">v_o_4</span> <span class="o">=</span> <span class="n">z3</span><span class="o">.</span><span class="n">Real</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;v_o_4</span><span class="si">{</span><span class="n">suffix</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="n">F4</span> <span class="o">=</span> <span class="p">(</span><span class="n">v_o_4</span> <span class="o">==</span> <span class="n">ReLU</span><span class="p">(</span><span class="n">z3</span><span class="o">.</span><span class="n">Sum</span><span class="p">([</span><span class="n">w24</span> <span class="o">*</span> <span class="n">v_in_4_0</span><span class="p">,</span> <span class="n">w34</span> <span class="o">*</span> <span class="n">v_in_4_1</span><span class="p">])</span> <span class="o">+</span> <span class="n">b4</span><span class="p">))</span>
+
+    <span class="c1"># Node 5</span>
+    <span class="n">v_in_5_0</span><span class="p">,</span> <span class="n">v_in_5_1</span> <span class="o">=</span> <span class="n">z3</span><span class="o">.</span><span class="n">Reals</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;v_in_5_0</span><span class="si">{</span><span class="n">suffix</span><span class="si">}</span><span class="s1"> v_in_5_1</span><span class="si">{</span><span class="n">suffix</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="n">v_o_5</span> <span class="o">=</span> <span class="n">z3</span><span class="o">.</span><span class="n">Real</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;v_o_5</span><span class="si">{</span><span class="n">suffix</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="n">F5</span> <span class="o">=</span> <span class="p">(</span><span class="n">v_o_5</span> <span class="o">==</span> <span class="n">ReLU</span><span class="p">(</span><span class="n">z3</span><span class="o">.</span><span class="n">Sum</span><span class="p">([</span><span class="n">w25</span> <span class="o">*</span> <span class="n">v_in_5_0</span><span class="p">,</span> <span class="n">w35</span> <span class="o">*</span> <span class="n">v_in_5_1</span><span class="p">])</span> <span class="o">+</span> <span class="n">b5</span><span class="p">))</span>
+
+    <span class="c1"># Output</span>
+    <span class="n">v_in_o_0</span><span class="p">,</span> <span class="n">v_in_o_1</span> <span class="o">=</span> <span class="n">z3</span><span class="o">.</span><span class="n">Reals</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;v_in_o_0</span><span class="si">{</span><span class="n">suffix</span><span class="si">}</span><span class="s1"> v_in_o_1</span><span class="si">{</span><span class="n">suffix</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="n">v_out</span> <span class="o">=</span> <span class="n">z3</span><span class="o">.</span><span class="n">Real</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;v_out</span><span class="si">{</span><span class="n">suffix</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="n">FO</span> <span class="o">=</span> <span class="p">(</span><span class="n">v_out</span> <span class="o">==</span> <span class="n">z3</span><span class="o">.</span><span class="n">Sum</span><span class="p">([</span><span class="n">w4o</span> <span class="o">*</span> <span class="n">v_in_o_0</span><span class="p">,</span> <span class="n">w5o</span> <span class="o">*</span> <span class="n">v_in_o_1</span><span class="p">])</span> <span class="o">+</span> <span class="n">bout</span><span class="p">)</span>
+
+    <span class="n">FV</span> <span class="o">=</span> <span class="n">z3</span><span class="o">.</span><span class="n">And</span><span class="p">(</span><span class="n">F2</span><span class="p">,</span> <span class="n">F3</span><span class="p">,</span> <span class="n">F4</span><span class="p">,</span> <span class="n">F5</span><span class="p">,</span> <span class="n">FO</span><span class="p">)</span>
+
+    <span class="n">FE</span> <span class="o">=</span> <span class="n">z3</span><span class="o">.</span><span class="n">And</span><span class="p">([</span>
+        <span class="n">v_in_2_0</span> <span class="o">==</span> <span class="n">v_in</span><span class="p">,</span>
+        <span class="n">v_in_3_0</span> <span class="o">==</span> <span class="n">v_in</span><span class="p">,</span>
+        <span class="n">v_in_4_0</span> <span class="o">==</span> <span class="n">v_o_2</span><span class="p">,</span>
+        <span class="n">v_in_4_1</span> <span class="o">==</span> <span class="n">v_o_3</span><span class="p">,</span>
+        <span class="n">v_in_5_0</span> <span class="o">==</span> <span class="n">v_o_2</span><span class="p">,</span>
+        <span class="n">v_in_5_1</span> <span class="o">==</span> <span class="n">v_o_3</span><span class="p">,</span>
+        <span class="n">v_in_o_0</span> <span class="o">==</span> <span class="n">v_o_4</span><span class="p">,</span>
+        <span class="n">v_in_o_1</span> <span class="o">==</span> <span class="n">v_o_5</span>
+    <span class="p">])</span>
+
+    <span class="k">return</span> <span class="n">z3</span><span class="o">.</span><span class="n">And</span><span class="p">(</span><span class="n">FV</span><span class="p">,</span> <span class="n">FE</span><span class="p">),</span> <span class="n">v_out</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">FG</span><span class="p">,</span> <span class="n">v_out</span> <span class="o">=</span> <span class="n">create_graph_encoding</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">FG_prime</span><span class="p">,</span> <span class="n">v_out_prime</span> <span class="o">=</span> <span class="n">create_graph_encoding</span><span class="p">(</span><span class="n">x_prime</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s1">&#39;_prime&#39;</span><span class="p">)</span>
+
+<span class="n">a</span> <span class="o">=</span> <span class="n">z3</span><span class="o">.</span><span class="n">And</span><span class="p">([</span>
+    <span class="n">precondition</span><span class="p">,</span>
+    <span class="n">FG</span><span class="p">,</span>
+    <span class="n">FG_prime</span><span class="p">,</span>
+    <span class="n">r</span> <span class="o">==</span> <span class="n">v_out</span><span class="p">,</span>
+    <span class="n">r_prime</span> <span class="o">==</span> <span class="n">v_out_prime</span>
+<span class="p">])</span>
+
+<span class="n">correctness_property</span> <span class="o">=</span> <span class="n">z3</span><span class="o">.</span><span class="n">Implies</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">postcondition</span><span class="p">)</span>
+
+<span class="n">solver</span> <span class="o">=</span> <span class="n">z3</span><span class="o">.</span><span class="n">Solver</span><span class="p">()</span>
+<span class="n">solver</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">z3</span><span class="o">.</span><span class="n">Not</span><span class="p">(</span><span class="n">correctness_property</span><span class="p">))</span>
+
+<span class="k">if</span> <span class="n">solver</span><span class="o">.</span><span class="n">check</span><span class="p">()</span> <span class="o">==</span> <span class="n">z3</span><span class="o">.</span><span class="n">unsat</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Correctness property holds&quot;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Can&#39;t prove correctness property&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Correctness property holds
+</pre></div>
+</div>
+</div>
+</div>
+<p>And we’ll try an invalid input to see if that fails:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">precondition</span> <span class="o">=</span> <span class="n">z3</span><span class="o">.</span><span class="n">And</span><span class="p">(</span><span class="n">x</span> <span class="o">&gt;=</span> <span class="mf">0.1</span><span class="p">,</span> <span class="n">x</span> <span class="o">&lt;=</span> <span class="mi">6</span><span class="p">,</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="n">x_prime</span><span class="p">)</span>
+
+<span class="n">a</span> <span class="o">=</span> <span class="n">z3</span><span class="o">.</span><span class="n">And</span><span class="p">([</span>
+    <span class="n">precondition</span><span class="p">,</span>
+    <span class="n">FG</span><span class="p">,</span>
+    <span class="n">FG_prime</span><span class="p">,</span>
+    <span class="n">r</span> <span class="o">==</span> <span class="n">v_out</span><span class="p">,</span>
+    <span class="n">r_prime</span> <span class="o">==</span> <span class="n">v_out_prime</span>
+<span class="p">])</span>
+
+<span class="n">correctness_property</span> <span class="o">=</span> <span class="n">z3</span><span class="o">.</span><span class="n">Implies</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">postcondition</span><span class="p">)</span>
+
+<span class="n">solver</span> <span class="o">=</span> <span class="n">z3</span><span class="o">.</span><span class="n">Solver</span><span class="p">()</span>
+<span class="n">solver</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">z3</span><span class="o">.</span><span class="n">Not</span><span class="p">(</span><span class="n">correctness_property</span><span class="p">))</span>
+
+<span class="k">if</span> <span class="n">solver</span><span class="o">.</span><span class="n">check</span><span class="p">()</span> <span class="o">==</span> <span class="n">z3</span><span class="o">.</span><span class="n">unsat</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Correctness property holds&quot;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Can&#39;t prove correctness property&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Can&#39;t prove correctness property
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="the-real-implementation-sine">
+<h3><span class="section-number">17.1.2. </span>The Real Implementation (Sine)<a class="headerlink" href="#the-real-implementation-sine" title="Link to this heading">#</a></h3>
+<p>We’ll do the same for a sine function model, so we can compare it to the FO(SUM)
+method.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sine_model</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">ReLUFNN</span><span class="p">(</span><span class="n">input_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">output_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">hidden_size</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">num_hidden_layers</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="c1"># If this file does not exist, run the preparation notebook of the demo app.</span>
+<span class="n">sine_model</span><span class="o">.</span><span class="n">load_state_dict</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;../demo-app/models/pwl_geometric_sine.pt&quot;</span><span class="p">,</span> <span class="n">weights_only</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+<span class="n">sine_model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+
+<span class="n">x_train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">10000</span><span class="p">)</span>
+<span class="n">y_train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">x_train</span><span class="p">])</span>
+
+<span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+    <span class="n">predicted</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">sine_model</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+    <span class="p">)</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">predicted</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Neural Network approximation&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">FileNotFoundError</span><span class="g g-Whitespace">                         </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">19</span><span class="p">],</span> <span class="n">line</span> <span class="mi">3</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="n">sine_model</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">ReLUFNN</span><span class="p">(</span><span class="n">input_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">output_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">hidden_size</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">num_hidden_layers</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="c1"># If this file does not exist, run the preparation notebook of the demo app.</span>
+<span class="ne">----&gt; </span><span class="mi">3</span> <span class="n">sine_model</span><span class="o">.</span><span class="n">load_state_dict</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;../demo-app/models/pwl_geometric_sine.pt&quot;</span><span class="p">,</span> <span class="n">weights_only</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="n">sine_model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="n">x_train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">10000</span><span class="p">)</span>
+
+<span class="nn">File ~/Projects/Uni/uh-master-thesis-artifact/notebooks/venv/lib/python3.10/site-packages/torch/serialization.py:1319,</span> in <span class="ni">load</span><span class="nt">(f, map_location, pickle_module, weights_only, mmap, **pickle_load_args)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1316</span> <span class="k">if</span> <span class="s2">&quot;encoding&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">pickle_load_args</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+<span class="g g-Whitespace">   </span><span class="mi">1317</span>     <span class="n">pickle_load_args</span><span class="p">[</span><span class="s2">&quot;encoding&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;utf-8&quot;</span>
+<span class="ne">-&gt; </span><span class="mi">1319</span> <span class="k">with</span> <span class="n">_open_file_like</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">opened_file</span><span class="p">:</span>
+<span class="g g-Whitespace">   </span><span class="mi">1320</span>     <span class="k">if</span> <span class="n">_is_zipfile</span><span class="p">(</span><span class="n">opened_file</span><span class="p">):</span>
+<span class="g g-Whitespace">   </span><span class="mi">1321</span>         <span class="c1"># The zipfile reader is going to advance the current file position.</span>
+<span class="g g-Whitespace">   </span><span class="mi">1322</span>         <span class="c1"># If we want to actually tail call to torch.jit.load, we need to</span>
+<span class="g g-Whitespace">   </span><span class="mi">1323</span>         <span class="c1"># reset back to the original position.</span>
+<span class="g g-Whitespace">   </span><span class="mi">1324</span>         <span class="n">orig_position</span> <span class="o">=</span> <span class="n">opened_file</span><span class="o">.</span><span class="n">tell</span><span class="p">()</span>
+
+<span class="nn">File ~/Projects/Uni/uh-master-thesis-artifact/notebooks/venv/lib/python3.10/site-packages/torch/serialization.py:659,</span> in <span class="ni">_open_file_like</span><span class="nt">(name_or_buffer, mode)</span>
+<span class="g g-Whitespace">    </span><span class="mi">657</span> <span class="k">def</span> <span class="nf">_open_file_like</span><span class="p">(</span><span class="n">name_or_buffer</span><span class="p">,</span> <span class="n">mode</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">658</span>     <span class="k">if</span> <span class="n">_is_path</span><span class="p">(</span><span class="n">name_or_buffer</span><span class="p">):</span>
+<span class="ne">--&gt; </span><span class="mi">659</span>         <span class="k">return</span> <span class="n">_open_file</span><span class="p">(</span><span class="n">name_or_buffer</span><span class="p">,</span> <span class="n">mode</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">660</span>     <span class="k">else</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">661</span>         <span class="k">if</span> <span class="s2">&quot;w&quot;</span> <span class="ow">in</span> <span class="n">mode</span><span class="p">:</span>
+
+<span class="nn">File ~/Projects/Uni/uh-master-thesis-artifact/notebooks/venv/lib/python3.10/site-packages/torch/serialization.py:640,</span> in <span class="ni">_open_file.__init__</span><span class="nt">(self, name, mode)</span>
+<span class="g g-Whitespace">    </span><span class="mi">639</span> <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">mode</span><span class="p">):</span>
+<span class="ne">--&gt; </span><span class="mi">640</span>     <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">mode</span><span class="p">))</span>
+
+<span class="ne">FileNotFoundError</span>: [Errno 2] No such file or directory: &#39;../demo-app/models/pwl_geometric_sine.pt&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can see that the model approximates a sine function – at least, on the range
+we trained on. Purely informational, here it is with the x-range a bit bigger.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x_train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10000</span><span class="p">)</span>
+
+<span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+    <span class="n">predicted</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">sine_model</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+    <span class="p">)</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">predicted</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Neural Network approximation&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/86b887f96709e722e986a046b7c0718556878259f86038869fa9c8d90f09c8b9.png" src="_images/86b887f96709e722e986a046b7c0718556878259f86038869fa9c8d90f09c8b9.png" />
+</div>
+</div>
+<p>Now we want to formally verify the same properties on the sine function.</p>
+<p><strong>Example 1</strong>: for the input range [-6, 6], f(x) should always be between -1 and</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{gather}
+\{ x \geq -6 \land x \leq 6 \} \\
+r \leftarrow f(x) \\
+\{ r \geq -1 \land r \leq 1 \}
+\end{gather}
+\end{split}\]</div>
+<p><strong>Example 2</strong>: Between [-1, 1], the function should always be increasing.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{gather}
+\{ x \geq -1 \land x \leq 1 \land x' \geq -1 \land x' \leq 1 \land x &gt; x' \} \\
+r \leftarrow f(x) \\
+r' \leftarrow f(x') \\
+\{ r \geq r' \}
+\end{gather}
+\end{split}\]</div>
+<p>We’ll start with example 1. Let’s see if we can encode the precondition in Z3.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">z3</span><span class="o">.</span><span class="n">Real</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">)</span>
+<span class="n">precondition</span> <span class="o">=</span> <span class="n">z3</span><span class="o">.</span><span class="n">And</span><span class="p">(</span><span class="n">x</span> <span class="o">&gt;=</span> <span class="o">-</span><span class="mi">6</span><span class="p">,</span> <span class="n">x</span> <span class="o">&lt;=</span> <span class="mi">6</span><span class="p">)</span>
+<span class="n">precondition</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html">x &ge; -6 &and; x &le; 6</div></div>
+</div>
+<p>Great, and now the postcondition:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">r</span> <span class="o">=</span> <span class="n">z3</span><span class="o">.</span><span class="n">Real</span><span class="p">(</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>
+<span class="n">postcondition</span> <span class="o">=</span> <span class="n">z3</span><span class="o">.</span><span class="n">And</span><span class="p">(</span><span class="n">r</span> <span class="o">&gt;=</span> <span class="o">-</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">r</span> <span class="o">&lt;=</span> <span class="mf">1.5</span><span class="p">)</span>
+<span class="n">postcondition</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html">r &ge; -3/2 &and; r &le; 3/2</div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">state_dict</span> <span class="o">=</span> <span class="n">sine_model</span><span class="o">.</span><span class="n">state_dict</span><span class="p">()</span>
+<span class="n">hidden_weights</span> <span class="o">=</span> <span class="n">state_dict</span><span class="p">[</span><span class="s1">&#39;linear_relu_stack.0.weight&#39;</span><span class="p">]</span>
+<span class="n">hidden_biases</span> <span class="o">=</span> <span class="n">state_dict</span><span class="p">[</span><span class="s1">&#39;linear_relu_stack.0.bias&#39;</span><span class="p">]</span>
+<span class="n">output_weights</span> <span class="o">=</span> <span class="n">state_dict</span><span class="p">[</span><span class="s1">&#39;linear_relu_stack.2.weight&#39;</span><span class="p">]</span>
+<span class="n">output_bias</span> <span class="o">=</span> <span class="n">state_dict</span><span class="p">[</span><span class="s1">&#39;linear_relu_stack.2.bias&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">v_in</span> <span class="o">=</span> <span class="n">z3</span><span class="o">.</span><span class="n">Real</span><span class="p">(</span><span class="s1">&#39;v_in&#39;</span><span class="p">)</span>
+
+<span class="n">hidden_nodes</span> <span class="o">=</span> <span class="n">z3</span><span class="o">.</span><span class="n">RealVector</span><span class="p">(</span><span class="s2">&quot;hidden_out_&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">hidden_biases</span><span class="p">))</span>
+
+<span class="c1"># Nodes</span>
+<span class="n">hidden_nodes_output</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">out_weights</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">v_i_out</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">hidden_nodes</span><span class="p">):</span>
+    <span class="n">weight</span> <span class="o">=</span> <span class="n">hidden_weights</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+    <span class="n">bias</span> <span class="o">=</span> <span class="n">hidden_biases</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+    <span class="n">hidden_nodes_output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">v_i_out</span> <span class="o">==</span> <span class="n">ReLU</span><span class="p">(</span><span class="n">weight</span> <span class="o">*</span> <span class="n">v_in</span> <span class="o">+</span> <span class="n">bias</span><span class="p">))</span>
+
+    <span class="n">out_weight</span> <span class="o">=</span> <span class="n">output_weights</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+    <span class="n">out_weights</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">out_weight</span> <span class="o">*</span> <span class="n">v_i_out</span><span class="p">)</span>
+
+<span class="n">v_out</span> <span class="o">=</span> <span class="n">z3</span><span class="o">.</span><span class="n">Real</span><span class="p">(</span><span class="s1">&#39;v_out&#39;</span><span class="p">)</span>
+<span class="n">FO</span> <span class="o">=</span> <span class="p">(</span><span class="n">v_out</span> <span class="o">==</span> <span class="n">z3</span><span class="o">.</span><span class="n">Sum</span><span class="p">(</span><span class="n">out_weights</span><span class="p">)</span> <span class="o">+</span> <span class="n">output_bias</span><span class="p">)</span>
+
+<span class="n">FG</span> <span class="o">=</span> <span class="n">z3</span><span class="o">.</span><span class="n">And</span><span class="p">(</span><span class="n">z3</span><span class="o">.</span><span class="n">And</span><span class="p">(</span><span class="n">hidden_nodes_output</span><span class="p">),</span> <span class="n">FO</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="n">z3</span><span class="o">.</span><span class="n">And</span><span class="p">([</span>
+    <span class="n">precondition</span><span class="p">,</span>
+    <span class="n">FG</span><span class="p">,</span>
+    <span class="n">v_in</span> <span class="o">==</span> <span class="n">x</span><span class="p">,</span> <span class="c1"># Link input</span>
+    <span class="n">r</span> <span class="o">==</span> <span class="n">v_out</span> <span class="c1"># Link output</span>
+<span class="p">])</span>
+
+<span class="n">correctness_property</span> <span class="o">=</span> <span class="n">z3</span><span class="o">.</span><span class="n">Implies</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">postcondition</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We run in the NP-completeness of SAT solving: this doesn’t finish in reasonable
+time (i.e. a few minutes) on my humble machine.</p>
+</section>
+</section>
+<section id="marabou">
+<h2><span class="section-number">17.2. </span>Marabou<a class="headerlink" href="#marabou" title="Link to this heading">#</a></h2>
+<p>All of the above required a lot of manual work to encode the network. Marabou is
+a tool that automates a lot of this away, we simply need to pass it a supported
+model file (e.g. TensorFlow, ONNX).</p>
+<section id="simple-network">
+<h3><span class="section-number">17.2.1. </span>Simple network<a class="headerlink" href="#simple-network" title="Link to this heading">#</a></h3>
+<p>We’ll start again with the simple network. First off, we need to have an ONNX
+presentation of it.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">MODEL_PATH_SIMPLE</span> <span class="o">=</span> <span class="s2">&quot;models/marabou_simple.onnx&quot;</span>
+<span class="n">dummy_input</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># A dummy input for the export</span>
+<span class="n">onnx_path</span> <span class="o">=</span> <span class="n">MODEL_PATH_SIMPLE</span>
+<span class="n">torch</span><span class="o">.</span><span class="n">onnx</span><span class="o">.</span><span class="n">export</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">dummy_input</span><span class="p">,</span> <span class="n">onnx_path</span><span class="p">,</span> <span class="n">input_names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;input&#39;</span><span class="p">],</span> <span class="n">output_names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;output&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now we can use it with Marabou</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">maraboupy</span> <span class="kn">import</span> <span class="n">Marabou</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="c1"># Marabou prints a whole lot by default, disable it.</span>
+<span class="n">options</span> <span class="o">=</span> <span class="n">Marabou</span><span class="o">.</span><span class="n">createOptions</span><span class="p">(</span><span class="n">verbosity</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2025-03-24 16:57:53.643476: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:485] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
+2025-03-24 16:57:53.735596: E external/local_xla/xla/stream_executor/cuda/cuda_dnn.cc:8454] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
+2025-03-24 16:57:53.759078: E external/local_xla/xla/stream_executor/cuda/cuda_blas.cc:1452] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING:tensorflow:From /home/mark/Projects/Uni/uh-master-thesis-artifact/notebooks/venv/lib/python3.10/site-packages/tensorflow/python/compat/v2_compat.py:98: disable_resource_variables (from tensorflow.python.ops.resource_variables_toggle) is deprecated and will be removed in a future version.
+Instructions for updating:
+non-resource variables are not supported in the long term
+</pre></div>
+</div>
+</div>
+</div>
+<p>Marabou works by checking if there exists an assignment to the input vars in the
+given bounds that gives an output that satisfies the output constraints. So, we
+need to check if an input in [-5, 15] yields something outside of [-0.1, 5]
+(with 0.1 added for small errors).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">network</span> <span class="o">=</span> <span class="n">Marabou</span><span class="o">.</span><span class="n">read_onnx</span><span class="p">(</span><span class="n">MODEL_PATH_SIMPLE</span><span class="p">)</span>
+
+<span class="n">input_var</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">inputVars</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">output_var</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">outputVars</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="c1"># We&#39;ll check if all values in the input range [-5, 15]</span>
+<span class="c1"># has an output bound between [-0.1, 5.1], cfr example 1</span>
+<span class="n">network</span><span class="o">.</span><span class="n">setLowerBound</span><span class="p">(</span><span class="n">input_var</span><span class="p">,</span><span class="o">-</span><span class="mf">5.0</span><span class="p">)</span>
+<span class="n">network</span><span class="o">.</span><span class="n">setUpperBound</span><span class="p">(</span><span class="n">input_var</span><span class="p">,</span> <span class="mf">15.0</span><span class="p">)</span>
+
+
+<span class="c1">#network.setLowerBound(output_var, 7.1)</span>
+<span class="n">network</span><span class="o">.</span><span class="n">setUpperBound</span><span class="p">(</span><span class="n">output_var</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.1</span><span class="p">)</span>
+
+<span class="n">sat</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">statistics</span>  <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">sat</span> <span class="o">==</span> <span class="s1">&#39;sat&#39;</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Found a counterexample for r &gt;= 0&quot;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No counterexample found&quot;</span><span class="p">)</span>
+
+<span class="c1">#del network.upperBounds[output_var]</span>
+<span class="c1">#network.setLowerBound(output_var, 5.1)</span>
+
+<span class="c1">#sat, values, statistics  = network.solve(options=options)</span>
+<span class="c1">#if sat == &#39;sat&#39;:</span>
+<span class="c1">#    print(&quot;Found a counterexample for r &lt;= 5&quot;)</span>
+<span class="c1">#else:</span>
+<span class="c1">#    print(&quot;No counterexample found&quot;)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>unsat
+No counterexample found
+</pre></div>
+</div>
+</div>
+</div>
+<p>Great, this proves our correctness property with way less work. Let’s check if
+the inverse also works, as before, i.e. check if it correctly finds a
+counterexample.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">network</span> <span class="o">=</span> <span class="n">Marabou</span><span class="o">.</span><span class="n">read_onnx</span><span class="p">(</span><span class="n">MODEL_PATH_SIMPLE</span><span class="p">)</span>
+
+<span class="n">input_var</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">inputVars</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">output_var</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">outputVars</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="n">network</span><span class="o">.</span><span class="n">setLowerBound</span><span class="p">(</span><span class="n">input_var</span><span class="p">,</span> <span class="o">-</span><span class="mf">5.0</span><span class="p">)</span>
+<span class="n">network</span><span class="o">.</span><span class="n">setUpperBound</span><span class="p">(</span><span class="n">input_var</span><span class="p">,</span> <span class="mf">15.0</span><span class="p">)</span>
+
+<span class="c1"># Lower bound changed to 1. This should fail!</span>
+<span class="n">network</span><span class="o">.</span><span class="n">setUpperBound</span><span class="p">(</span><span class="n">output_var</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="n">sat</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">statistics</span>  <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">sat</span> <span class="o">==</span> <span class="s1">&#39;sat&#39;</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Found a counterexample&quot;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No counterexample found&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>sat
+input 0 = -5.0
+output 0 = -0.00022276738309301436
+Found a counterexample
+</pre></div>
+</div>
+</div>
+</div>
+<p>We found a counterexample: for input -5, the network outputs ~0, so &lt;= 1.</p>
+<p>Now, example 2 requires that we take 2 inputs, <span class="math notranslate nohighlight">\(x_1\)</span> and <span class="math notranslate nohighlight">\(x_2\)</span>, and evaluate the
+network two times, <span class="math notranslate nohighlight">\(r_1 \leftarrow f(x_1)\)</span> and <span class="math notranslate nohighlight">\(r_2 \leftarrow f(x_2)\)</span>.
+Unfortunately, executing a network twice is still unsupported in Marabou as of
+this moment.</p>
+<p>Sources:</p>
+<ul class="simple">
+<li><p>Github issue that asks for this feature: <a class="github reference external" href="https://github.com/NeuralNetworkVerification/Marabou/issues/598">NeuralNetworkVerification/Marabou#598</a></p></li>
+<li><p>Vehicle marabou config: <a class="github reference external" href="https://github.com/vehicle-lang/vehicle/blob/f8dcd995b07d5c6178d10829c0d533cea7def2f0/vehicle/src/Vehicle/Verify/Verifier/Marabou.hs#L28">vehicle-lang/vehicle</a></p></li>
+</ul>
+<p>Instead, we’ll try an alternative. For this network, the function between <span class="math notranslate nohighlight">\(x=0\)</span>
+and <span class="math notranslate nohighlight">\(x=5\)</span> is simply <span class="math notranslate nohighlight">\(f(x)\)</span>. So, we can verify if the network evaluation is equal
+to its input (+/- some epsilon) in this range. To use the same notation as
+before:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{gather}
+\{ x \geq 0.1 \land x \leq 4.9 \} \\
+r \leftarrow f(x) \\
+\{ |r-x| \leq \epsilon \}
+\end{gather}
+\end{split}\]</div>
+<p>In Marabou, we have to work with equations. What we want to check is this:</p>
+<div class="math notranslate nohighlight">
+\[
+|x - y| &lt;= \epsilon
+\]</div>
+<p>We have to convert this to inequality constraints of the form:</p>
+<div class="math notranslate nohighlight">
+\[
+\Sigma_i vars_i * coeffs_i &lt;= scalar
+\]</div>
+<p>For absolute value, we know we can write this as follows:</p>
+<div class="math notranslate nohighlight">
+\[
+-\epsilon &lt;= x - y &lt;= \epsilon
+\]</div>
+<p>So split into two inequalities of the correct form:</p>
+<div class="math notranslate nohighlight">
+\[
++1x + -1y &lt;= \epsilon
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+-1x + +1y &lt;= \epsilon
+\]</div>
+<p>In our python implementation we will use <span class="math notranslate nohighlight">\(-\epsilon\)</span> instead, because we are
+looking for a counterexample.</p>
+<p>Additionally, because these are two equations, we will run marabou twice: one
+time for each equation.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">range</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">4.9</span><span class="p">]</span>
+<span class="n">epsilon</span> <span class="o">=</span> <span class="mf">0.1</span>
+
+<span class="n">network</span> <span class="o">=</span> <span class="n">Marabou</span><span class="o">.</span><span class="n">read_onnx</span><span class="p">(</span><span class="n">MODEL_PATH_SIMPLE</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">inputVars</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">outputVars</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">network</span><span class="o">.</span><span class="n">setLowerBound</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">range</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">network</span><span class="o">.</span><span class="n">setUpperBound</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">range</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="c1"># -x + y &lt;= -epsilon</span>
+<span class="n">network</span><span class="o">.</span><span class="n">addInequality</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="o">-</span><span class="n">epsilon</span><span class="p">)</span>
+
+<span class="n">sat1</span> <span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span>  <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">)</span>
+
+<span class="n">network</span> <span class="o">=</span> <span class="n">Marabou</span><span class="o">.</span><span class="n">read_onnx</span><span class="p">(</span><span class="n">MODEL_PATH_SIMPLE</span><span class="p">)</span>
+<span class="n">network</span><span class="o">.</span><span class="n">setLowerBound</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">range</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">network</span><span class="o">.</span><span class="n">setUpperBound</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">range</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="c1"># x - y &lt;= -epsilon</span>
+<span class="n">network</span><span class="o">.</span><span class="n">addInequality</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="o">-</span><span class="n">epsilon</span><span class="p">)</span>
+
+<span class="n">sat2</span> <span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span>  <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>unsat
+unsat
+</pre></div>
+</div>
+</div>
+</div>
+<p>Both equations are unsat; we can’t find a counterexample; the property holds.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">range</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mi">6</span><span class="p">]</span>
+<span class="n">epsilon</span> <span class="o">=</span> <span class="mf">0.1</span>
+
+<span class="n">network</span> <span class="o">=</span> <span class="n">Marabou</span><span class="o">.</span><span class="n">read_onnx</span><span class="p">(</span><span class="n">MODEL_PATH_SIMPLE</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">inputVars</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">outputVars</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">network</span><span class="o">.</span><span class="n">setLowerBound</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">range</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">network</span><span class="o">.</span><span class="n">setUpperBound</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">range</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="c1"># -x + y &lt;= -epsilon</span>
+<span class="n">network</span><span class="o">.</span><span class="n">addInequality</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="o">-</span><span class="n">epsilon</span><span class="p">)</span>
+
+<span class="n">sat1</span> <span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span>  <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">)</span>
+
+<span class="n">network</span> <span class="o">=</span> <span class="n">Marabou</span><span class="o">.</span><span class="n">read_onnx</span><span class="p">(</span><span class="n">MODEL_PATH_SIMPLE</span><span class="p">)</span>
+<span class="n">network</span><span class="o">.</span><span class="n">setLowerBound</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">range</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">network</span><span class="o">.</span><span class="n">setUpperBound</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">range</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="c1"># x - y &lt;= -epsilon</span>
+<span class="n">network</span><span class="o">.</span><span class="n">addInequality</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="o">-</span><span class="n">epsilon</span><span class="p">)</span>
+
+<span class="n">sat2</span> <span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span>  <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>sat
+input 0 = 5.049994027184484
+output 0 = 4.949994027184431
+unsat
+</pre></div>
+</div>
+</div>
+</div>
+<p>If we increase the range we <em>do</em> find a counterexample, as expected.</p>
+</section>
+<section id="sine">
+<h3><span class="section-number">17.2.2. </span>Sine<a class="headerlink" href="#sine" title="Link to this heading">#</a></h3>
+<p>Now let’s see if we can do the same for the sine example and actually get to a
+result this time.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">MODEL_PATH_SINE</span> <span class="o">=</span> <span class="s2">&quot;models/marabou_sine.onnx&quot;</span>
+<span class="n">dummy_input</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># A dummy input for the export</span>
+<span class="n">onnx_path</span> <span class="o">=</span> <span class="n">MODEL_PATH_SINE</span>
+<span class="n">torch</span><span class="o">.</span><span class="n">onnx</span><span class="o">.</span><span class="n">export</span><span class="p">(</span><span class="n">sine_model</span><span class="p">,</span> <span class="n">dummy_input</span><span class="p">,</span> <span class="n">onnx_path</span><span class="p">,</span> <span class="n">input_names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;input&#39;</span><span class="p">],</span> <span class="n">output_names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;output&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">network</span> <span class="o">=</span> <span class="n">Marabou</span><span class="o">.</span><span class="n">read_onnx</span><span class="p">(</span><span class="n">MODEL_PATH_SINE</span><span class="p">)</span>
+
+<span class="n">input_var</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">inputVars</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">output_var</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">outputVars</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="c1"># We&#39;ll check if all values in the input range [-6,6]</span>
+<span class="c1"># has an output bound between [-1.1, 1.1], cfr example 1</span>
+<span class="n">network</span><span class="o">.</span><span class="n">setLowerBound</span><span class="p">(</span><span class="n">input_var</span><span class="p">,</span><span class="o">-</span><span class="mf">6.0</span><span class="p">)</span>
+<span class="n">network</span><span class="o">.</span><span class="n">setUpperBound</span><span class="p">(</span><span class="n">input_var</span><span class="p">,</span> <span class="mf">6.0</span><span class="p">)</span>
+
+<span class="n">network</span><span class="o">.</span><span class="n">setUpperBound</span><span class="p">(</span><span class="n">output_var</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.1</span><span class="p">)</span>
+
+<span class="n">sat</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">statistics</span>  <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">sat</span> <span class="o">==</span> <span class="s1">&#39;sat&#39;</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Found a counterexample for r &gt;= -1.1&quot;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No counterexample found&quot;</span><span class="p">)</span>
+
+<span class="k">del</span> <span class="n">network</span><span class="o">.</span><span class="n">upperBounds</span><span class="p">[</span><span class="n">output_var</span><span class="p">]</span>
+<span class="n">network</span><span class="o">.</span><span class="n">setLowerBound</span><span class="p">(</span><span class="n">output_var</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">)</span>
+
+<span class="n">sat</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">statistics</span>  <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">sat</span> <span class="o">==</span> <span class="s1">&#39;sat&#39;</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Found a counterexample for r &lt;= 1.1&quot;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No counterexample found&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>unsat
+No counterexample found
+unsat
+No counterexample found
+</pre></div>
+</div>
+</div>
+</div>
+<p>And now a check that should fail:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">network</span> <span class="o">=</span> <span class="n">Marabou</span><span class="o">.</span><span class="n">read_onnx</span><span class="p">(</span><span class="n">MODEL_PATH_SINE</span><span class="p">)</span>
+
+<span class="n">input_var</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">inputVars</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">output_var</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">outputVars</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="c1"># We&#39;ll check if all values in the input range [-6,6]</span>
+<span class="c1"># has an output bound between [-1.1, 1.1], cfr example 1</span>
+<span class="n">network</span><span class="o">.</span><span class="n">setLowerBound</span><span class="p">(</span><span class="n">input_var</span><span class="p">,</span><span class="o">-</span><span class="mf">6.0</span><span class="p">)</span>
+<span class="n">network</span><span class="o">.</span><span class="n">setUpperBound</span><span class="p">(</span><span class="n">input_var</span><span class="p">,</span> <span class="mf">6.0</span><span class="p">)</span>
+
+<span class="n">network</span><span class="o">.</span><span class="n">setUpperBound</span><span class="p">(</span><span class="n">output_var</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.9</span><span class="p">)</span>
+
+<span class="n">sat</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">statistics</span>  <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">sat</span> <span class="o">==</span> <span class="s1">&#39;sat&#39;</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Found a counterexample for r &gt;= -0.9&quot;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No counterexample found&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>sat
+input 0 = 4.241784982097351
+output 0 = -0.9
+Found a counterexample for r &gt;= -0.9
+</pre></div>
+</div>
+</div>
+</div>
+<p>Notice how much more optimized Marabou is! It solves this network in ~10
+seconds, as apposed to Z3 which doesn’t finish on the sine network in reasonable
+time.</p>
+<p>Now for example 2, we have the same issue as before: Marabou can’t work with two
+network evaluations. Instead, we’ll test something similar as the other model:
+that the sine function is +/- <span class="math notranslate nohighlight">\(f(x) = x\)</span> between -1 and 1.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">range</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+<span class="n">epsilon</span> <span class="o">=</span> <span class="mf">0.2</span>
+
+<span class="n">network</span> <span class="o">=</span> <span class="n">Marabou</span><span class="o">.</span><span class="n">read_onnx</span><span class="p">(</span><span class="n">MODEL_PATH_SINE</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">inputVars</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">outputVars</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">network</span><span class="o">.</span><span class="n">setLowerBound</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">range</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">network</span><span class="o">.</span><span class="n">setUpperBound</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">range</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="c1"># -x + y &lt;= -epsilon</span>
+<span class="n">network</span><span class="o">.</span><span class="n">addInequality</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="o">-</span><span class="n">epsilon</span><span class="p">)</span>
+
+<span class="n">sat1</span> <span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span>  <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">)</span>
+
+<span class="n">network</span> <span class="o">=</span> <span class="n">Marabou</span><span class="o">.</span><span class="n">read_onnx</span><span class="p">(</span><span class="n">MODEL_PATH_SINE</span><span class="p">)</span>
+<span class="n">network</span><span class="o">.</span><span class="n">setLowerBound</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">range</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">network</span><span class="o">.</span><span class="n">setUpperBound</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">range</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="c1"># x - y &lt;= -epsilon</span>
+<span class="n">network</span><span class="o">.</span><span class="n">addInequality</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="o">-</span><span class="n">epsilon</span><span class="p">)</span>
+
+<span class="n">sat2</span> <span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span>  <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>unsat
+unsat
+</pre></div>
+</div>
+</div>
+</div>
+<p>The property holds! Now to prove it doesn’t hold if we extend the range:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">range</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mf">1.2</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">]</span>
+<span class="n">epsilon</span> <span class="o">=</span> <span class="mf">0.2</span>
+
+<span class="n">network</span> <span class="o">=</span> <span class="n">Marabou</span><span class="o">.</span><span class="n">read_onnx</span><span class="p">(</span><span class="n">MODEL_PATH_SINE</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">inputVars</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">outputVars</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">network</span><span class="o">.</span><span class="n">setLowerBound</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">range</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">network</span><span class="o">.</span><span class="n">setUpperBound</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">range</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="c1"># -x + y &lt;= -epsilon</span>
+<span class="n">network</span><span class="o">.</span><span class="n">addInequality</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="o">-</span><span class="n">epsilon</span><span class="p">)</span>
+
+<span class="n">sat1</span> <span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span>  <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">)</span>
+
+<span class="n">network</span> <span class="o">=</span> <span class="n">Marabou</span><span class="o">.</span><span class="n">read_onnx</span><span class="p">(</span><span class="n">MODEL_PATH_SINE</span><span class="p">)</span>
+<span class="n">network</span><span class="o">.</span><span class="n">setLowerBound</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">range</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">network</span><span class="o">.</span><span class="n">setUpperBound</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">range</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="c1"># x - y &lt;= -epsilon</span>
+<span class="n">network</span><span class="o">.</span><span class="n">addInequality</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="o">-</span><span class="n">epsilon</span><span class="p">)</span>
+
+<span class="n">sat2</span> <span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span>  <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>sat
+input 0 = 1.1211126346155684
+output 0 = 0.9192756190714626
+sat
+input 0 = -1.1153027680741503
+output 0 = -0.9153027680741501
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="vehicle">
+<h2><span class="section-number">17.3. </span>Vehicle<a class="headerlink" href="#vehicle" title="Link to this heading">#</a></h2>
+<p><a class="reference external" href="https://github.com/vehicle-lang/vehicle">Vehicle</a> is a verification tool
+based on a specification language. We experimented with the <code class="docutils literal notranslate"><span class="pre">vehicle</span></code> CLI.</p>
+<p>VCL is the specification language in question, which is very clear and succinct,
+and easy to pick up for people familiar with functional programming and/or
+theorem proving. This is our monotonicity property in VCL:</p>
+<div class="highlight-txt notranslate"><div class="highlight"><pre><span></span>-- test.vcl
+type Input = Tensor Rat [1]
+type Output = Tensor Rat [1]
+
+@network
+f : Input -&gt; Output
+
+validInput : Input -&gt; Bool
+validInput x = 0 &lt;= x ! 0 &lt;= 5
+
+@property
+monotonicity : Bool
+monotonicity = forall x1 x2 . validInput x1 and validInput x2
+    =&gt; f x1 ! 0 &lt;= f x2 ! 0
+</pre></div>
+</div>
+<p>Which we run as follows:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>vehicle<span class="w"> </span>verify<span class="w"> </span>-s<span class="w"> </span>test.vcl<span class="w"> </span>--network<span class="w"> </span>f:models/marabou_simple.onnx<span class="w"> </span>--verifier<span class="w"> </span>Marabou
+</pre></div>
+</div>
+<p>Unfortunately, since we use Marabou as the backend, Vehicle won’t verify this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Warning: In property &#39;monotonicity&#39;, at least one of the generated queries were found to contain a strict inequality (i.e. constraints of the form &#39;x &lt; y&#39;). Unfortunately the Marabou query format only supports non-strict inequalities (i.e. constraints of the form &#39;x &lt;= y&#39;).
+
+In order to provide support, Vehicle has automatically converted the strict inequalities to non-strict inequalites. This is not sound, but errors will be at most the floating point epsilon used by the verifier, which is usually very small (e.g. 1e-9). However, this may lead to unexpected behaviour (e.g. loss of the law of excluded middle).
+
+See https://github.com/vehicle-lang/vehicle/issues/74 for further details.
+
+Verifying properties:
+  monotonicity [...................................................] 0/1 queries
+    result: ? - Marabou errored
+
+Error: The Marabou verifier currently doesn&#39;t support properties that involve multiple applications of the same network. This property applies:
+  the network &#39;f&#39; 2 times
+</pre></div>
+</div>
+<p>We can implement the alternative without problems though:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>type Input = Tensor Rat [1]
+type Output = Tensor Rat [1]
+
+@network
+f : Input -&gt; Output
+
+validInput : Input -&gt; Bool
+validInput x = 0.1 &lt;= x ! 0 &lt;= 4.9
+
+@property
+increasing : Bool
+increasing = forall x1 . validInput x1
+    =&gt; (x1 ! 0 &lt;= f x1 ! 0 + 1) and (x1 ! 0 &gt;= f x1 ! 0 - 1)
+</pre></div>
+</div>
+<p>Example 1, the boundedness problem, is also trivial to implement in Vehicle.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="4.1%20Saliency.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title"><span class="section-number">16. </span>Saliency</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="5.1%20NNV%20with%20SQL.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><span class="section-number">18. </span>NNV with SQL</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#z3">17.1. Z3</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#a-basic-network">17.1.1. A Basic Network</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-real-implementation-sine">17.1.2. The Real Implementation (Sine)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#marabou">17.2. Marabou</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#simple-network">17.2.1. Simple network</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sine">17.2.2. Sine</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#vehicle">17.3. Vehicle</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Mark Gerarts & Juno Steegmans & Jan Van den Bussche
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

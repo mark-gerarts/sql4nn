@@ -30,3 +30,6 @@ docker start neo4j || \
     --name neo4j \
     neo4j:5.22.0
 ```
+
+The live site at `docs/` is currently manually updated, but should be
+transferred to a GH action if time permits.

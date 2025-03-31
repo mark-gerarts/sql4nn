@@ -1,0 +1,1510 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>11. Querying useless neurons &#8212; SQL4NN - Validation and expressive querying of models as data</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '2 Querying useless neurons';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="12. Querying useless neurons - performance" href="2.1%20Querying%20useless%20neurons%20-%20performance.html" />
+    <link rel="prev" title="10. Basic model queries" href="2.0%20Basic%20model%20queries.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">SQL4NN - Validation and expressive querying of models as data</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    0. Intro
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Evaluating a Neural Network</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="1.1%20Eval%20-%20basic%20eval.html">1. Basic eval function</a></li>
+<li class="toctree-l1"><a class="reference internal" href="1.2%20Eval%20-%20multiple%20i-o.html">2. Multiple input and output neurons</a></li>
+<li class="toctree-l1"><a class="reference internal" href="1.3%20Eval%20-%20multiple%20input%20sets.html">3. Multiple input sets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="1.4%20Eval%20-%20recursive.html">4. Recursive queries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="1.5%20Eval%20-%20graph%20database.html">5. Graph databases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="1.6%20Eval%20-%20Performance%20v2.html">6. Performance Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="1.7%20Eval%20-%20UDF.html">7. Table as UDF input</a></li>
+<li class="toctree-l1"><a class="reference internal" href="1.8%20Eval%20-%20CNN.html">8. Eval on a CNN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="1.9%20Eval%20-%20Multiple%20networks.html">9. Multiple networks</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Model queries</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="2.0%20Basic%20model%20queries.html">10. Basic model queries</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">11. Querying useless neurons</a></li>
+<li class="toctree-l1"><a class="reference internal" href="2.1%20Querying%20useless%20neurons%20-%20performance.html">12. Querying useless neurons - performance</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Calculating integrals</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="3.1%20Integral.html">13. Calculating integrals in SQL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="3.2%20Integral%20-%20duplicate%20breakpoints.html">14. Handling duplicate breakpoints</a></li>
+<li class="toctree-l1"><a class="reference internal" href="3.3%20Integral%20-%20Geometric%20representation.html">15. Geometric representation</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Saliency</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="4.1%20Saliency.html">16. Saliency</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Verification</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="5.0%20NN%20verification.html">17. Neural Network Verification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="5.1%20NNV%20with%20SQL.html">18. NNV with SQL</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Aside</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="A.1%20Aside%20-%20DuckDB%20bugreport.html">19. DuckDB performance issues</a></li>
+<li class="toctree-l1"><a class="reference internal" href="A.2%20Aside%20-%20ONNX.html">20. ONNX</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/2 Querying useless neurons.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Querying useless neurons</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#creating-the-model">11.1. Creating the model</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pytorch-implementation">11.2. PyTorch implementation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#creating-the-sql-query">11.3. Creating the SQL query</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#comparison">11.4. Comparison</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#larger-example">11.5. Larger example</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusion">11.6. Conclusion</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="querying-useless-neurons">
+<h1><span class="section-number">11. </span>Querying useless neurons<a class="headerlink" href="#querying-useless-neurons" title="Link to this heading">#</a></h1>
+<p>In the previous part, we constructed a SQL query that could evaluate a neural
+network. We can use <code class="docutils literal notranslate"><span class="pre">eval</span></code> to detect <em>useless</em> neurons for a given input, i.e.
+neurons that to not contribute anything to the end result. This can be useful to
+reduce the complexity of a neural network.</p>
+<p>The idea behind it is simple: evaluate the model on a given input. Now, remove a
+neuron and evaluate the model again. If the two outputs are sufficiently close
+to each other, the removed neuron can be considered useless. Keep in mind that
+this is always for a specific input.</p>
+<p>We can define this a bit more formally as follows: take <span class="math notranslate nohighlight">\(eval'\)</span>, the version of
+<span class="math notranslate nohighlight">\(eval\)</span> with some node <span class="math notranslate nohighlight">\(z\)</span> left out. If then <span class="math notranslate nohighlight">\(|eval - eval'| &lt; \epsilon\)</span> holds,
+<span class="math notranslate nohighlight">\(z\)</span> is useless.</p>
+<section id="creating-the-model">
+<h2><span class="section-number">11.1. </span>Creating the model<a class="headerlink" href="#creating-the-model" title="Link to this heading">#</a></h2>
+<p>We create a simple model, restricting it to 1 output value to more easily
+compare the <code class="docutils literal notranslate"><span class="pre">eval</span></code> results.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">utils.duckdb</span> <span class="k">as</span> <span class="nn">db</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">utils.nn</span> <span class="k">as</span> <span class="nn">nn</span>
+<span class="kn">import</span> <span class="nn">copy</span>
+
+<span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">223</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">x</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">y</span><span class="p">]</span>
+
+<span class="n">num_samples</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">x_train</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">num_samples</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="mi">100</span>
+<span class="n">y_train</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="p">[</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">]</span> <span class="ow">in</span> <span class="n">x_train</span><span class="p">]</span>
+
+<span class="n">input_size</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">output_size</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">hidden_size</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">num_hidden_layers</span> <span class="o">=</span> <span class="mi">1</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">ReLUFNN</span><span class="p">(</span>
+    <span class="n">input_size</span><span class="o">=</span><span class="n">input_size</span><span class="p">,</span>
+    <span class="n">output_size</span><span class="o">=</span><span class="n">output_size</span><span class="p">,</span>
+    <span class="n">hidden_size</span><span class="o">=</span><span class="n">hidden_size</span><span class="p">,</span>
+    <span class="n">num_hidden_layers</span><span class="o">=</span><span class="n">num_hidden_layers</span>
+<span class="p">)</span>
+<span class="n">nn</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">save_path</span><span class="o">=</span><span class="s2">&quot;models/useless.pt&quot;</span><span class="p">)</span>
+
+<span class="n">db</span><span class="o">.</span><span class="n">load_pytorch_model_into_db</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="pytorch-implementation">
+<h2><span class="section-number">11.2. </span>PyTorch implementation<a class="headerlink" href="#pytorch-implementation" title="Link to this heading">#</a></h2>
+<p>Let’s first try disabling each node in PyTorch and running the model, so we have
+something to compare to.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_layer_and_node_index</span><span class="p">(</span><span class="n">node_id_to_disable</span><span class="p">):</span>
+    <span class="n">node_id_zero_indexed</span> <span class="o">=</span> <span class="n">node_id_to_disable</span> <span class="o">-</span> <span class="mi">1</span>
+
+    <span class="k">if</span> <span class="n">node_id_zero_indexed</span> <span class="o">&lt;</span> <span class="n">input_size</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">node_id_zero_indexed</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="p">((</span><span class="n">node_id_zero_indexed</span> <span class="o">-</span> <span class="n">input_size</span><span class="p">)</span> <span class="o">//</span> <span class="n">hidden_size</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="p">((</span><span class="n">node_id_zero_indexed</span> <span class="o">-</span> <span class="n">input_size</span><span class="p">)</span> <span class="o">%</span> <span class="n">hidden_size</span><span class="p">)</span>
+    <span class="p">)</span>
+
+<span class="c1"># Preserve the original state dict so we can reset it.</span>
+<span class="n">original_state_dict</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">state_dict</span><span class="p">())</span>
+
+<span class="k">def</span> <span class="nf">disable_node</span><span class="p">(</span><span class="n">node_id_to_disable</span><span class="p">):</span>
+    <span class="c1"># Reset the model to cancel out any previously disabled nodes.</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">load_state_dict</span><span class="p">(</span><span class="n">original_state_dict</span><span class="p">)</span>
+
+    <span class="n">state_dict</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">state_dict</span><span class="p">()</span>
+    <span class="p">(</span><span class="n">layer_idx</span><span class="p">,</span> <span class="n">node_idx</span><span class="p">)</span> <span class="o">=</span> <span class="n">get_layer_and_node_index</span><span class="p">(</span><span class="n">node_id_to_disable</span><span class="p">)</span>
+
+    <span class="c1"># The state dict alternates between weights and biases, so the index of our</span>
+    <span class="c1"># bias tensor is the following:</span>
+    <span class="n">layer_state_dict_idx</span> <span class="o">=</span> <span class="n">layer_idx</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">-</span> <span class="mi">1</span>
+
+    <span class="c1"># Disable the bias.</span>
+    <span class="n">biases</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">state_dict</span><span class="o">.</span><span class="n">values</span><span class="p">())[</span><span class="n">layer_state_dict_idx</span><span class="p">]</span>
+    <span class="n">biases</span><span class="p">[</span><span class="n">node_idx</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="c1"># Disable the weights.</span>
+    <span class="n">weights</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">state_dict</span><span class="o">.</span><span class="n">values</span><span class="p">())[</span><span class="n">layer_state_dict_idx</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="n">weights</span><span class="p">[</span><span class="n">node_idx</span><span class="p">]</span><span class="o">.</span><span class="n">zero_</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nn_output</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span> <span class="mi">20</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Regular output: </span><span class="si">{</span><span class="n">nn_output</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">node_id_to_disable</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">input_size</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">input_size</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">hidden_size</span> <span class="o">*</span> <span class="n">num_hidden_layers</span><span class="p">):</span>
+    <span class="n">disable_node</span><span class="p">(</span><span class="n">node_id_to_disable</span><span class="p">)</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span> <span class="mi">20</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">))</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;With neuron </span><span class="si">{</span><span class="n">node_id_to_disable</span><span class="si">}</span><span class="s2"> disabled: </span><span class="si">{</span><span class="n">output</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Regular output: 47.10837936401367
+With neuron 3 disabled: 1.9035104513168335
+With neuron 4 disabled: 47.10837936401367
+With neuron 5 disabled: 47.10837936401367
+</pre></div>
+</div>
+</div>
+</div>
+<p>From this output we can observe that both node 4 and 5 are useless for this
+input: disabling them still yields the same output.</p>
+</section>
+<section id="creating-the-sql-query">
+<h2><span class="section-number">11.3. </span>Creating the SQL query<a class="headerlink" href="#creating-the-sql-query" title="Link to this heading">#</a></h2>
+<p>We build upon our recursive <code class="docutils literal notranslate"><span class="pre">eval</span></code> query to produce a query that calculates the
+difference <span class="math notranslate nohighlight">\(|eval - eval'|\)</span>. After that it is trivial to filter out differences
+that are smaller than some <span class="math notranslate nohighlight">\(\epsilon\)</span> using a <code class="docutils literal notranslate"><span class="pre">WHERE</span></code>-clause.</p>
+<p>The <a class="reference download internal" download="" href="_downloads/4155b7f0b6c0f3842ccc9bc6ce0dae35/useless_neurons_from_input.sql"><span class="xref download myst">full query</span></a> goes as follows:</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">WITH</span><span class="w"> </span><span class="k">RECURSIVE</span><span class="w"> </span><span class="n">inputs</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">MATERIALIZED</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="c1">-- Fetch inputs together</span>
+<span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="n">i</span><span class="p">.</span><span class="n">input_set_id</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">.</span><span class="n">input_node_idx</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">.</span><span class="n">input_value</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">id</span>
+<span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="k">input</span><span class="w"> </span><span class="n">i</span>
+<span class="w">    </span><span class="k">JOIN</span><span class="w"> </span><span class="p">(</span>
+<span class="w">        </span><span class="k">SELECT</span>
+<span class="w">            </span><span class="n">id</span><span class="p">,</span>
+<span class="w">            </span><span class="n">bias</span><span class="p">,</span>
+<span class="w">            </span><span class="n">ROW_NUMBER</span><span class="p">()</span><span class="w"> </span><span class="n">OVER</span><span class="w"> </span><span class="p">(</span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">input_node_idx</span>
+<span class="w">        </span><span class="k">FROM</span><span class="w"> </span><span class="n">node</span><span class="w"> </span><span class="n">n</span>
+<span class="w">        </span><span class="k">WHERE</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">EXISTS</span>
+<span class="w">        </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">edge</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">dst</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">id</span><span class="p">)</span>
+<span class="w">    </span><span class="p">)</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">input_node_idx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="p">.</span><span class="n">input_node_idx</span>
+<span class="p">),</span>
+<span class="n">output_nodes</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">MATERIALIZED</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">bias</span>
+<span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="n">node</span><span class="w"> </span><span class="n">n</span>
+<span class="w">    </span><span class="k">WHERE</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">EXISTS</span>
+<span class="w">    </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">edge</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">src</span><span class="o">=</span><span class="n">n</span><span class="p">.</span><span class="n">id</span><span class="p">)</span>
+<span class="p">),</span>
+<span class="n">hidden_nodes</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">MATERIALIZED</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">bias</span>
+<span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="n">node</span><span class="w"> </span><span class="n">n</span>
+<span class="w">    </span><span class="k">WHERE</span><span class="w"> </span><span class="k">EXISTS</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">edge</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">src</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">id</span><span class="p">)</span>
+<span class="w">    </span><span class="k">AND</span><span class="w"> </span><span class="k">EXISTS</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">edge</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">dst</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">id</span><span class="p">)</span>
+<span class="p">),</span>
+<span class="n">tx</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="c1">-- Base case (t1)</span>
+<span class="w">    </span><span class="k">SELECT</span>
+<span class="w">        </span><span class="n">i</span><span class="p">.</span><span class="n">input_set_id</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">input_set_id</span><span class="p">,</span>
+<span class="w">        </span><span class="n">GREATEST</span><span class="p">(</span>
+<span class="w">            </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">            </span><span class="n">n</span><span class="p">.</span><span class="n">bias</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="k">SUM</span><span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">weight</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">i</span><span class="p">.</span><span class="n">input_value</span><span class="p">)</span>
+<span class="w">        </span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">value</span><span class="p">,</span>
+<span class="w">        </span><span class="n">e</span><span class="p">.</span><span class="n">dst</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id</span>
+<span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="n">inputs</span><span class="w"> </span><span class="n">i</span>
+<span class="w">    </span><span class="k">JOIN</span><span class="w"> </span><span class="n">edge</span><span class="w"> </span><span class="n">e</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">i</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">src</span>
+<span class="w">    </span><span class="k">JOIN</span><span class="w"> </span><span class="n">node</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">dst</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">id</span>
+<span class="w">    </span><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">dst</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">bias</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">.</span><span class="n">input_set_id</span>
+
+<span class="w">    </span><span class="k">UNION</span><span class="w"> </span><span class="k">ALL</span>
+
+<span class="w">    </span><span class="k">SELECT</span>
+<span class="w">        </span><span class="n">tx</span><span class="p">.</span><span class="n">input_set_id</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">input_set_id</span><span class="p">,</span>
+<span class="w">        </span><span class="n">GREATEST</span><span class="p">(</span>
+<span class="w">            </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">            </span><span class="n">n</span><span class="p">.</span><span class="n">bias</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="k">SUM</span><span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">weight</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">tx</span><span class="p">.</span><span class="n">value</span><span class="p">)</span>
+<span class="w">        </span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">value</span><span class="p">,</span>
+<span class="w">        </span><span class="n">e</span><span class="p">.</span><span class="n">dst</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id</span>
+<span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="n">tx</span>
+<span class="w">    </span><span class="k">JOIN</span><span class="w"> </span><span class="n">edge</span><span class="w"> </span><span class="n">e</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">tx</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">src</span>
+<span class="w">    </span><span class="k">JOIN</span><span class="w"> </span><span class="n">node</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">dst</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">id</span>
+<span class="w">    </span><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">dst</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">bias</span><span class="p">,</span><span class="w"> </span><span class="n">tx</span><span class="p">.</span><span class="n">input_set_id</span>
+<span class="p">),</span>
+<span class="n">t_out</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">MATERIALIZED</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="k">SELECT</span>
+<span class="w">        </span><span class="n">tx</span><span class="p">.</span><span class="n">input_set_id</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">input_set_id</span><span class="p">,</span>
+<span class="w">        </span><span class="n">o</span><span class="p">.</span><span class="n">bias</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="k">SUM</span><span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">weight</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">tx</span><span class="p">.</span><span class="n">value</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">value</span><span class="p">,</span>
+<span class="w">        </span><span class="n">e</span><span class="p">.</span><span class="n">dst</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id</span>
+<span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="n">output_nodes</span><span class="w"> </span><span class="n">o</span>
+<span class="w">    </span><span class="k">JOIN</span><span class="w"> </span><span class="n">edge</span><span class="w"> </span><span class="n">e</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">dst</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="n">id</span>
+<span class="w">    </span><span class="k">JOIN</span><span class="w"> </span><span class="n">tx</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">tx</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">src</span>
+<span class="w">    </span><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">dst</span><span class="p">,</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="n">bias</span><span class="p">,</span><span class="w"> </span><span class="n">tx</span><span class="p">.</span><span class="n">input_set_id</span>
+<span class="p">),</span>
+<span class="n">tx_prime</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="k">SELECT</span>
+<span class="w">        </span><span class="n">h_to_remove</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">h_to_remove</span><span class="p">,</span>
+<span class="w">        </span><span class="n">i</span><span class="p">.</span><span class="n">input_set_id</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">input_set_id</span><span class="p">,</span>
+<span class="w">        </span><span class="n">GREATEST</span><span class="p">(</span>
+<span class="w">            </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">            </span><span class="n">n</span><span class="p">.</span><span class="n">bias</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="k">SUM</span><span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">weight</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">i</span><span class="p">.</span><span class="n">input_value</span><span class="p">)</span>
+<span class="w">        </span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">value</span><span class="p">,</span>
+<span class="w">        </span><span class="n">e</span><span class="p">.</span><span class="n">dst</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id</span>
+<span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="n">inputs</span><span class="w"> </span><span class="n">i</span>
+<span class="w">    </span><span class="k">CROSS</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">hidden_nodes</span><span class="w"> </span><span class="n">h_to_remove</span>
+<span class="w">    </span><span class="k">JOIN</span><span class="w"> </span><span class="n">edge</span><span class="w"> </span><span class="n">e</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">i</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">src</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">dst</span><span class="w"> </span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="n">h_to_remove</span><span class="p">.</span><span class="n">id</span>
+<span class="w">    </span><span class="k">JOIN</span><span class="w"> </span><span class="n">node</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">dst</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">id</span>
+<span class="w">    </span><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">h_to_remove</span><span class="p">.</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">.</span><span class="n">input_set_id</span><span class="p">,</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">dst</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">bias</span>
+
+<span class="w">    </span><span class="k">UNION</span><span class="w"> </span><span class="k">ALL</span>
+
+<span class="w">    </span><span class="k">SELECT</span>
+<span class="w">        </span><span class="n">tx_prime</span><span class="p">.</span><span class="n">h_to_remove</span><span class="p">,</span>
+<span class="w">        </span><span class="n">tx_prime</span><span class="p">.</span><span class="n">input_set_id</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">input_set_id</span><span class="p">,</span>
+<span class="w">        </span><span class="n">GREATEST</span><span class="p">(</span>
+<span class="w">            </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">            </span><span class="n">n</span><span class="p">.</span><span class="n">bias</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="k">SUM</span><span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">weight</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">tx_prime</span><span class="p">.</span><span class="n">value</span><span class="p">)</span>
+<span class="w">        </span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">value</span><span class="p">,</span>
+<span class="w">        </span><span class="n">e</span><span class="p">.</span><span class="n">dst</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id</span>
+<span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="n">tx_prime</span>
+<span class="w">    </span><span class="k">JOIN</span><span class="w"> </span><span class="n">edge</span><span class="w"> </span><span class="n">e</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">tx_prime</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">src</span>
+<span class="w">        </span><span class="k">AND</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">dst</span><span class="w"> </span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="n">tx_prime</span><span class="p">.</span><span class="n">h_to_remove</span>
+<span class="w">        </span><span class="k">AND</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">src</span><span class="w"> </span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="n">tx_prime</span><span class="p">.</span><span class="n">h_to_remove</span>
+<span class="w">    </span><span class="k">JOIN</span><span class="w"> </span><span class="n">node</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">dst</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">id</span>
+<span class="w">    </span><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">tx_prime</span><span class="p">.</span><span class="n">h_to_remove</span><span class="p">,</span><span class="w"> </span><span class="n">tx_prime</span><span class="p">.</span><span class="n">input_set_id</span><span class="p">,</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">dst</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">bias</span>
+<span class="p">),</span>
+<span class="n">t_out_prime</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="k">SELECT</span>
+<span class="w">        </span><span class="n">tx_prime</span><span class="p">.</span><span class="n">h_to_remove</span><span class="p">,</span>
+<span class="w">        </span><span class="n">tx_prime</span><span class="p">.</span><span class="n">input_set_id</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">input_set_id</span><span class="p">,</span>
+<span class="w">        </span><span class="n">o</span><span class="p">.</span><span class="n">bias</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="k">SUM</span><span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">weight</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">tx_prime</span><span class="p">.</span><span class="n">value</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">value</span><span class="p">,</span>
+<span class="w">        </span><span class="n">e</span><span class="p">.</span><span class="n">dst</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id</span>
+<span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="n">output_nodes</span><span class="w"> </span><span class="n">o</span>
+<span class="w">    </span><span class="k">JOIN</span><span class="w"> </span><span class="n">edge</span><span class="w"> </span><span class="n">e</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">dst</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="n">id</span>
+<span class="w">    </span><span class="k">JOIN</span><span class="w"> </span><span class="n">tx_prime</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">tx_prime</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">src</span>
+<span class="w">    </span><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">tx_prime</span><span class="p">.</span><span class="n">h_to_remove</span><span class="p">,</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">dst</span><span class="p">,</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="n">bias</span><span class="p">,</span><span class="w"> </span><span class="n">tx_prime</span><span class="p">.</span><span class="n">input_set_id</span>
+<span class="p">),</span>
+<span class="n">useless_neurons_overview</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="k">SELECT</span>
+<span class="w">        </span><span class="n">t_out_prime</span><span class="p">.</span><span class="n">h_to_remove</span><span class="p">,</span>
+<span class="w">        </span><span class="n">t_out_prime</span><span class="p">.</span><span class="n">input_set_id</span><span class="p">,</span>
+<span class="w">        </span><span class="n">t_out_prime</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">output_id</span><span class="p">,</span>
+<span class="w">        </span><span class="n">t_out</span><span class="p">.</span><span class="n">value</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">eval</span><span class="p">,</span>
+<span class="w">        </span><span class="n">t_out_prime</span><span class="p">.</span><span class="n">value</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">eval_prime</span><span class="p">,</span>
+<span class="w">        </span><span class="k">ABS</span><span class="p">(</span><span class="n">t_out</span><span class="p">.</span><span class="n">value</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">t_out_prime</span><span class="p">.</span><span class="n">value</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">delta</span>
+<span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="n">t_out_prime</span>
+<span class="w">    </span><span class="k">JOIN</span><span class="w"> </span><span class="n">t_out</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">t_out</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">t_out_prime</span><span class="p">.</span><span class="n">id</span>
+<span class="p">)</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">useless_neurons_overview</span><span class="w"> </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">h_to_remove</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>This query is very similar to the one final recursive query from <a class="reference internal" href="#./3.5%20generic%20eval%20-%20recursive.ipynb"><span class="xref myst">the earlier
+chapter</span></a>. We’ll highlight the new
+parts.</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="n">hidden_nodes</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">MATERIALIZED</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">bias</span>
+<span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="n">node</span><span class="w"> </span><span class="n">n</span>
+<span class="w">    </span><span class="k">WHERE</span><span class="w"> </span><span class="k">EXISTS</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">edge</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">src</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">id</span><span class="p">)</span>
+<span class="w">    </span><span class="k">AND</span><span class="w"> </span><span class="k">EXISTS</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">edge</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">dst</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">n</span><span class="p">.</span><span class="n">id</span><span class="p">)</span>
+<span class="p">),</span>
+</pre></div>
+</div>
+<p>We add a basic CTE to select the hidden nodes, because we need to calculate
+<span class="math notranslate nohighlight">\(eval'\)</span> for each one of them later on.</p>
+<p>In the main addition to the query, we essentially run <code class="docutils literal notranslate"><span class="pre">eval</span></code> for each hidden
+neuron, with that neuron removed. We call this <code class="docutils literal notranslate"><span class="pre">tx_out_prime</span></code>. We achieve this
+as follows:</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="n">tx_prime</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="c1">-- ...</span>
+<span class="w">    </span><span class="k">CROSS</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">hidden_nodes</span><span class="w"> </span><span class="n">h_to_remove</span>
+<span class="w">    </span><span class="k">JOIN</span><span class="w"> </span><span class="n">edge</span><span class="w"> </span><span class="n">e</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">i</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">src</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">dst</span><span class="w"> </span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="n">h_to_remove</span><span class="p">.</span><span class="n">id</span>
+<span class="w">    </span><span class="c1">-- ...</span>
+
+<span class="w">    </span><span class="k">UNION</span><span class="w"> </span><span class="k">ALL</span>
+
+<span class="w">    </span><span class="c1">-- ..</span>
+<span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="n">tx_prime</span>
+<span class="w">    </span><span class="k">JOIN</span><span class="w"> </span><span class="n">edge</span><span class="w"> </span><span class="n">e</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">tx_prime</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">src</span>
+<span class="w">        </span><span class="k">AND</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">dst</span><span class="w"> </span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="n">tx_prime</span><span class="p">.</span><span class="n">h_to_remove</span>
+<span class="w">        </span><span class="k">AND</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">src</span><span class="w"> </span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="n">tx_prime</span><span class="p">.</span><span class="n">h_to_remove</span>
+<span class="w">    </span><span class="c1">-- ...</span>
+<span class="p">),</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>The <code class="docutils literal notranslate"><span class="pre">CROSS</span> <span class="pre">JOIN</span></code> essentially “loops” over the hidden nodes we want to remove.</p></li>
+<li><p>For each node to remove, we add a join condition to remove the node from the
+join.</p></li>
+</ul>
+<p>This resulting overview simply displays the difference between the two for each hidden
+neuron, but the query can easily be altered to only show those neurons where the
+difference is smaller than some <span class="math notranslate nohighlight">\(\epsilon\)</span>.</p>
+</section>
+<section id="comparison">
+<h2><span class="section-number">11.4. </span>Comparison<a class="headerlink" href="#comparison" title="Link to this heading">#</a></h2>
+<p>Earlier, we found that neuron 4 and 5 were useless for our particular input.
+Let’s run the query now:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">db</span><span class="o">.</span><span class="n">con</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;TRUNCATE input&quot;</span><span class="p">)</span>
+<span class="n">db</span><span class="o">.</span><span class="n">con</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;INSERT INTO input VALUES (0, 1, 5), (0, 2, 20)&quot;</span><span class="p">)</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;queries/useless_neurons_from_input.sql&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">query</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+<span class="n">db</span><span class="o">.</span><span class="n">con</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">)</span><span class="o">.</span><span class="n">df</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>h_to_remove</th>
+      <th>input_set_id</th>
+      <th>output_id</th>
+      <th>eval</th>
+      <th>eval_prime</th>
+      <th>delta</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>3</td>
+      <td>0</td>
+      <td>6</td>
+      <td>47.108378</td>
+      <td>1.903510</td>
+      <td>45.204868</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>4</td>
+      <td>0</td>
+      <td>6</td>
+      <td>47.108378</td>
+      <td>47.108378</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>5</td>
+      <td>0</td>
+      <td>6</td>
+      <td>47.108378</td>
+      <td>47.108378</td>
+      <td>0.000000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>Indeed, the SQL query finds the same result. We can conclude that neurons 3 and
+4 are useless and can be removed.</p>
+</section>
+<section id="larger-example">
+<h2><span class="section-number">11.5. </span>Larger example<a class="headerlink" href="#larger-example" title="Link to this heading">#</a></h2>
+<p>The previous network only had 1 hidden layer with 3 nodes. Let’s create a bigger
+one and see how our query performs.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">ReLUFNN</span><span class="p">(</span>
+    <span class="n">input_size</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+    <span class="n">output_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">hidden_size</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+    <span class="n">num_hidden_layers</span><span class="o">=</span><span class="mi">10</span>
+<span class="p">)</span>
+<span class="n">nn</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">save_path</span><span class="o">=</span><span class="s2">&quot;models/useless_bigger.pt&quot;</span><span class="p">)</span>
+
+<span class="n">db</span><span class="o">.</span><span class="n">load_pytorch_model_into_db</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">db</span><span class="o">.</span><span class="n">con</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;TRUNCATE input&quot;</span><span class="p">)</span>
+<span class="n">db</span><span class="o">.</span><span class="n">con</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;INSERT INTO input VALUES (0, 1, 5), (0, 2, 20)&quot;</span><span class="p">)</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;queries/useless_neurons_from_input.sql&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">query</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">con</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">)</span><span class="o">.</span><span class="n">df</span><span class="p">()</span>
+<span class="n">df</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>h_to_remove</th>
+      <th>input_set_id</th>
+      <th>output_id</th>
+      <th>eval</th>
+      <th>eval_prime</th>
+      <th>delta</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>3</td>
+      <td>0</td>
+      <td>103</td>
+      <td>44.925945</td>
+      <td>39.348491</td>
+      <td>5.577453</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>4</td>
+      <td>0</td>
+      <td>103</td>
+      <td>44.925945</td>
+      <td>30.891371</td>
+      <td>14.034574</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>5</td>
+      <td>0</td>
+      <td>103</td>
+      <td>44.925945</td>
+      <td>41.924393</td>
+      <td>3.001552</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>6</td>
+      <td>0</td>
+      <td>103</td>
+      <td>44.925945</td>
+      <td>43.958574</td>
+      <td>0.967370</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>7</td>
+      <td>0</td>
+      <td>103</td>
+      <td>44.925945</td>
+      <td>35.874110</td>
+      <td>9.051835</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>95</th>
+      <td>98</td>
+      <td>0</td>
+      <td>103</td>
+      <td>44.925945</td>
+      <td>44.925945</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>96</th>
+      <td>99</td>
+      <td>0</td>
+      <td>103</td>
+      <td>44.925945</td>
+      <td>44.925945</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>97</th>
+      <td>100</td>
+      <td>0</td>
+      <td>103</td>
+      <td>44.925945</td>
+      <td>44.925945</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>98</th>
+      <td>101</td>
+      <td>0</td>
+      <td>103</td>
+      <td>44.925945</td>
+      <td>5.448792</td>
+      <td>39.477153</td>
+    </tr>
+    <tr>
+      <th>99</th>
+      <td>102</td>
+      <td>0</td>
+      <td>103</td>
+      <td>44.925945</td>
+      <td>44.925945</td>
+      <td>0.000000</td>
+    </tr>
+  </tbody>
+</table>
+<p>100 rows × 6 columns</p>
+</div></div></div>
+</div>
+<p>We used the same query again that provides us with an overview. We use
+<code class="docutils literal notranslate"><span class="pre">pandas</span></code> to filter this output because that’s easier in this notebook, but a
+simple <code class="docutils literal notranslate"><span class="pre">WHERE</span></code> condition in the SQL query would have yielded the same result.</p>
+<p>Let’s first look at the useful neurons.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">epsilon</span> <span class="o">=</span> <span class="mf">0.01</span>
+<span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;delta&#39;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">epsilon</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>h_to_remove</th>
+      <th>input_set_id</th>
+      <th>output_id</th>
+      <th>eval</th>
+      <th>eval_prime</th>
+      <th>delta</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>3</td>
+      <td>0</td>
+      <td>103</td>
+      <td>44.925945</td>
+      <td>39.348491</td>
+      <td>5.577453</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>4</td>
+      <td>0</td>
+      <td>103</td>
+      <td>44.925945</td>
+      <td>30.891371</td>
+      <td>14.034574</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>5</td>
+      <td>0</td>
+      <td>103</td>
+      <td>44.925945</td>
+      <td>41.924393</td>
+      <td>3.001552</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>6</td>
+      <td>0</td>
+      <td>103</td>
+      <td>44.925945</td>
+      <td>43.958574</td>
+      <td>0.967370</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>7</td>
+      <td>0</td>
+      <td>103</td>
+      <td>44.925945</td>
+      <td>35.874110</td>
+      <td>9.051835</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>9</td>
+      <td>0</td>
+      <td>103</td>
+      <td>44.925945</td>
+      <td>32.669875</td>
+      <td>12.256070</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>15</td>
+      <td>0</td>
+      <td>103</td>
+      <td>44.925945</td>
+      <td>44.741128</td>
+      <td>0.184817</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>16</td>
+      <td>0</td>
+      <td>103</td>
+      <td>44.925945</td>
+      <td>32.749066</td>
+      <td>12.176879</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>17</td>
+      <td>0</td>
+      <td>103</td>
+      <td>44.925945</td>
+      <td>30.422121</td>
+      <td>14.503824</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>18</td>
+      <td>0</td>
+      <td>103</td>
+      <td>44.925945</td>
+      <td>37.248850</td>
+      <td>7.677094</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>19</td>
+      <td>0</td>
+      <td>103</td>
+      <td>44.925945</td>
+      <td>32.202293</td>
+      <td>12.723651</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>20</td>
+      <td>0</td>
+      <td>103</td>
+      <td>44.925945</td>
+      <td>47.039668</td>
+      <td>2.113723</td>
+    </tr>
+    <tr>
+      <th>21</th>
+      <td>24</td>
+      <td>0</td>
+      <td>103</td>
+      <td>44.925945</td>
+      <td>36.856123</td>
+      <td>8.069822</td>
+    </tr>
+    <tr>
+      <th>22</th>
+      <td>25</td>
+      <td>0</td>
+      <td>103</td>
+      <td>44.925945</td>
+      <td>30.963298</td>
+      <td>13.962646</td>
+    </tr>
+    <tr>
+      <th>23</th>
+      <td>26</td>
+      <td>0</td>
+      <td>103</td>
+      <td>44.925945</td>
+      <td>26.562368</td>
+      <td>18.363576</td>
+    </tr>
+    <tr>
+      <th>24</th>
+      <td>27</td>
+      <td>0</td>
+      <td>103</td>
+      <td>44.925945</td>
+      <td>39.538097</td>
+      <td>5.387848</td>
+    </tr>
+    <tr>
+      <th>28</th>
+      <td>31</td>
+      <td>0</td>
+      <td>103</td>
+      <td>44.925945</td>
+      <td>44.862104</td>
+      <td>0.063840</td>
+    </tr>
+    <tr>
+      <th>31</th>
+      <td>34</td>
+      <td>0</td>
+      <td>103</td>
+      <td>44.925945</td>
+      <td>33.583333</td>
+      <td>11.342612</td>
+    </tr>
+    <tr>
+      <th>32</th>
+      <td>35</td>
+      <td>0</td>
+      <td>103</td>
+      <td>44.925945</td>
+      <td>-6.133331</td>
+      <td>51.059275</td>
+    </tr>
+    <tr>
+      <th>33</th>
+      <td>36</td>
+      <td>0</td>
+      <td>103</td>
+      <td>44.925945</td>
+      <td>27.046564</td>
+      <td>17.879381</td>
+    </tr>
+    <tr>
+      <th>41</th>
+      <td>44</td>
+      <td>0</td>
+      <td>103</td>
+      <td>44.925945</td>
+      <td>32.846007</td>
+      <td>12.079937</td>
+    </tr>
+    <tr>
+      <th>42</th>
+      <td>45</td>
+      <td>0</td>
+      <td>103</td>
+      <td>44.925945</td>
+      <td>-43.900020</td>
+      <td>88.825965</td>
+    </tr>
+    <tr>
+      <th>43</th>
+      <td>46</td>
+      <td>0</td>
+      <td>103</td>
+      <td>44.925945</td>
+      <td>46.026227</td>
+      <td>1.100282</td>
+    </tr>
+    <tr>
+      <th>44</th>
+      <td>47</td>
+      <td>0</td>
+      <td>103</td>
+      <td>44.925945</td>
+      <td>29.146452</td>
+      <td>15.779493</td>
+    </tr>
+    <tr>
+      <th>45</th>
+      <td>48</td>
+      <td>0</td>
+      <td>103</td>
+      <td>44.925945</td>
+      <td>45.929778</td>
+      <td>1.003833</td>
+    </tr>
+    <tr>
+      <th>53</th>
+      <td>56</td>
+      <td>0</td>
+      <td>103</td>
+      <td>44.925945</td>
+      <td>45.975926</td>
+      <td>1.049981</td>
+    </tr>
+    <tr>
+      <th>54</th>
+      <td>57</td>
+      <td>0</td>
+      <td>103</td>
+      <td>44.925945</td>
+      <td>44.972523</td>
+      <td>0.046578</td>
+    </tr>
+    <tr>
+      <th>55</th>
+      <td>58</td>
+      <td>0</td>
+      <td>103</td>
+      <td>44.925945</td>
+      <td>12.329996</td>
+      <td>32.595949</td>
+    </tr>
+    <tr>
+      <th>56</th>
+      <td>59</td>
+      <td>0</td>
+      <td>103</td>
+      <td>44.925945</td>
+      <td>38.966770</td>
+      <td>5.959175</td>
+    </tr>
+    <tr>
+      <th>57</th>
+      <td>60</td>
+      <td>0</td>
+      <td>103</td>
+      <td>44.925945</td>
+      <td>46.094117</td>
+      <td>1.168172</td>
+    </tr>
+    <tr>
+      <th>59</th>
+      <td>62</td>
+      <td>0</td>
+      <td>103</td>
+      <td>44.925945</td>
+      <td>24.399835</td>
+      <td>20.526110</td>
+    </tr>
+    <tr>
+      <th>63</th>
+      <td>66</td>
+      <td>0</td>
+      <td>103</td>
+      <td>44.925945</td>
+      <td>-32.949149</td>
+      <td>77.875094</td>
+    </tr>
+    <tr>
+      <th>65</th>
+      <td>68</td>
+      <td>0</td>
+      <td>103</td>
+      <td>44.925945</td>
+      <td>31.315196</td>
+      <td>13.610748</td>
+    </tr>
+    <tr>
+      <th>67</th>
+      <td>70</td>
+      <td>0</td>
+      <td>103</td>
+      <td>44.925945</td>
+      <td>35.514791</td>
+      <td>9.411154</td>
+    </tr>
+    <tr>
+      <th>69</th>
+      <td>72</td>
+      <td>0</td>
+      <td>103</td>
+      <td>44.925945</td>
+      <td>47.350009</td>
+      <td>2.424065</td>
+    </tr>
+    <tr>
+      <th>70</th>
+      <td>73</td>
+      <td>0</td>
+      <td>103</td>
+      <td>44.925945</td>
+      <td>17.005883</td>
+      <td>27.920062</td>
+    </tr>
+    <tr>
+      <th>71</th>
+      <td>74</td>
+      <td>0</td>
+      <td>103</td>
+      <td>44.925945</td>
+      <td>45.457785</td>
+      <td>0.531841</td>
+    </tr>
+    <tr>
+      <th>73</th>
+      <td>76</td>
+      <td>0</td>
+      <td>103</td>
+      <td>44.925945</td>
+      <td>-5.650829</td>
+      <td>50.576774</td>
+    </tr>
+    <tr>
+      <th>75</th>
+      <td>78</td>
+      <td>0</td>
+      <td>103</td>
+      <td>44.925945</td>
+      <td>48.467512</td>
+      <td>3.541567</td>
+    </tr>
+    <tr>
+      <th>77</th>
+      <td>80</td>
+      <td>0</td>
+      <td>103</td>
+      <td>44.925945</td>
+      <td>44.638262</td>
+      <td>0.287683</td>
+    </tr>
+    <tr>
+      <th>82</th>
+      <td>85</td>
+      <td>0</td>
+      <td>103</td>
+      <td>44.925945</td>
+      <td>-0.334227</td>
+      <td>45.260171</td>
+    </tr>
+    <tr>
+      <th>84</th>
+      <td>87</td>
+      <td>0</td>
+      <td>103</td>
+      <td>44.925945</td>
+      <td>45.342134</td>
+      <td>0.416189</td>
+    </tr>
+    <tr>
+      <th>86</th>
+      <td>89</td>
+      <td>0</td>
+      <td>103</td>
+      <td>44.925945</td>
+      <td>45.215591</td>
+      <td>0.289646</td>
+    </tr>
+    <tr>
+      <th>87</th>
+      <td>90</td>
+      <td>0</td>
+      <td>103</td>
+      <td>44.925945</td>
+      <td>41.469579</td>
+      <td>3.456365</td>
+    </tr>
+    <tr>
+      <th>90</th>
+      <td>93</td>
+      <td>0</td>
+      <td>103</td>
+      <td>44.925945</td>
+      <td>39.130350</td>
+      <td>5.795595</td>
+    </tr>
+    <tr>
+      <th>98</th>
+      <td>101</td>
+      <td>0</td>
+      <td>103</td>
+      <td>44.925945</td>
+      <td>5.448792</td>
+      <td>39.477153</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>As we can see, roughly half of the neurons actually provide meaningful
+contributions to the final output - for this specific input.</p>
+</section>
+<section id="conclusion">
+<h2><span class="section-number">11.6. </span>Conclusion<a class="headerlink" href="#conclusion" title="Link to this heading">#</a></h2>
+<p>We have shown how we can adapt the <code class="docutils literal notranslate"><span class="pre">eval</span></code> query to show us which neurons do not
+contribute anything to the output of a neural network, for a given input. This
+can be useful to reduce the complexity of a network.</p>
+<p>The next section explores how we can use a SQL query to calculate the integral
+of a function represented by a neural network.</p>
+<blockquote>
+<div><p>TODO: do we want to compare the SQL result of the bigger example to the PyTorch
+version as well?</p>
+</div></blockquote>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="2.0%20Basic%20model%20queries.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title"><span class="section-number">10. </span>Basic model queries</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="2.1%20Querying%20useless%20neurons%20-%20performance.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><span class="section-number">12. </span>Querying useless neurons - performance</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#creating-the-model">11.1. Creating the model</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pytorch-implementation">11.2. PyTorch implementation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#creating-the-sql-query">11.3. Creating the SQL query</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#comparison">11.4. Comparison</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#larger-example">11.5. Larger example</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusion">11.6. Conclusion</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Mark Gerarts & Juno Steegmans & Jan Van den Bussche
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

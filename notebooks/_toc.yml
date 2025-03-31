@@ -32,8 +32,8 @@ parts:
   - caption: Verification
     numbered: true
     chapters:
-      - file: 5.0 Neural Network Verification
-      - file: 5.0 NNV with SQL
+      - file: 5.0 NN verification
+      - file: 5.1 NNV with SQL
   - caption: Aside
     numbered: true
     chapters:
