@@ -1,0 +1,12 @@
+venv/
+*.onnx
+*.db
+*.db-journal
+__pycache__
+.ipynb_checkpoints
+_build/
+*.pt
+timings/*
+!timings/.gitkeep
+.tmp/
+Marabou.queries/

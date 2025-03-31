@@ -1,0 +1,41 @@
+format: jb-book
+root: intro
+parts:
+  - caption: Evaluating a Neural Network
+    numbered: true
+    chapters:
+      - file: 1.1 Eval - basic eval
+      - file: 1.2 Eval - multiple i-o
+      - file: 1.3 Eval - multiple input sets
+      - file: 1.4 Eval - recursive
+      - file: 1.5 Eval - graph database
+      - file: 1.6 Eval - Performance v2
+      - file: 1.7 Eval - UDF
+      - file: 1.8 Eval - CNN
+      - file: 1.9 Eval - Multiple networks
+  - caption: Model queries
+    numbered: true
+    chapters:
+      - file: 2.0 Basic model queries
+      - file: 2 Querying useless neurons
+      - file: 2.1 Querying useless neurons - performance
+  - caption: Calculating integrals
+    numbered: true
+    chapters:
+      - file: 3.1 Integral
+      - file: 3.2 Integral - duplicate breakpoints
+      - file: 3.3 Integral - Geometric representation
+  - caption: Saliency
+    numbered: true
+    chapters:
+      - file: 4.1 Saliency
+  - caption: Verification
+    numbered: true
+    chapters:
+      - file: 5.0 Neural Network Verification
+      - file: 5.0 NNV with SQL
+  - caption: Aside
+    numbered: true
+    chapters:
+      - file: A.1 Aside - DuckDB bugreport
+      - file: A.2 Aside - ONNX

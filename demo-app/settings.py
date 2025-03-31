@@ -1,0 +1,16 @@
+DB_SINGLE = "dbs/cnn_single.db"
+DB_MULTIPLE_EPOCHS = "dbs/cnn_multimodel.db"
+DB_MULTIPLE_SIZES = "dbs/cnn_multimodel_size.db"
+DB_BASIC_EVAL = "dbs/eval_basic.db"
+DB_PWL = "dbs/pwl_geometric_sine.db"
+
+EVAL_QUERY_PATH = "queries/eval_recursive_from_input_with_softmax.sql"
+BASIC_EVAL_QUERY_PATH = "queries/eval_recursive_from_input.sql"
+EVAL_MULTI_QUERY_PATH = "queries/eval_multi.sql"
+EVAL_SALIENCY_PATH = "queries/saliency.sql"
+PWL_QUERY_PATH = "queries/pwl.sql"
+SALIENCY_APPROX_QUERY_PATH = "queries/saliency_approximation.sql"
+
+MODEL_PATH = "models/mnist_cnn_14.pt"
+BASIC_EVAL_MODEL_PATH = "models/basic_eval.pt"
+PWL_MODEL_PATH = "models/pwl_geometric_sine.pt"

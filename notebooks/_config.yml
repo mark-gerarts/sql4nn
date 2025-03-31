@@ -1,0 +1,6 @@
+title: SQL4NN - Validation and expressive querying of models as data
+author: Mark Gerarts & Juno Steegmans & Jan Van den Bussche
+only_build_toc_files: true
+
+execute:
+  timeout: -1
