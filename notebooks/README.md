@@ -1,6 +1,8 @@
 # Notebooks
 
 Notebooks going through the implemented queries in a more blog-like style.
+Published at
+[https://mark-gerarts.github.io/sql4nn](https://mark-gerarts.github.io/sql4nn).
 
 ## Setup
 
