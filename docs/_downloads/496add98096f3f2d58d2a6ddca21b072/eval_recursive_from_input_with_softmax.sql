@@ -41,9 +41,6 @@ tx AS (
         ) AS value,
         e.dst AS id
     FROM tx
-    -- TODO:
-    -- Might it be worth it to first filter the query on node IDs of the
-    -- subsequent layer only? Cfr https://openproceedings.org/2023/conf/edbt/paper-7.pdf
     JOIN edge e ON tx.id = e.src
     JOIN node n ON e.dst = n.id
     GROUP BY e.dst, n.bias, tx.input_set_id

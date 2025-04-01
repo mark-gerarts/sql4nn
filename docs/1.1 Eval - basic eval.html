@@ -63,7 +63,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="2. Multiple input and output neurons" href="1.2%20Eval%20-%20multiple%20i-o.html" />
-    <link rel="prev" title="0. Intro" href="intro.html" />
+    <link rel="prev" title="0. Introduction" href="intro.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -171,7 +171,7 @@
         <ul class="nav bd-sidenav bd-sidenav__home-link">
             <li class="toctree-l1">
                 <a class="reference internal" href="intro.html">
-                    0. Intro
+                    0. Introduction
                 </a>
             </li>
         </ul>
@@ -379,15 +379,15 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="basic-eval-function">
 <h1><span class="section-number">1. </span>Basic eval function<a class="headerlink" href="#basic-eval-function" title="Link to this heading">#</a></h1>
-<p>The “Query Languages for Neural Networks” paper describes how we can implement
-an <em>eval</em> term in FO(SUM), which returns the output of a model for a given
-input. Our goal is to translate this term into a SQL query. In this chapter, we
-start from the simplest case, gradually building up in complexity in later
-chapters.</p>
+<p>The <a class="reference external" href="https://arxiv.org/abs/2408.10362">“Query Languages for Neural Networks”</a>
+paper describes how we can implement an <em>eval</em> term in FO(SUM), which returns
+the output of a model for a given input. Our goal is to translate this term into
+a SQL query. In this chapter, we start from the simplest case, gradually
+building up in complexity in later chapters.</p>
 <section id="creating-the-model">
 <h2><span class="section-number">1.1. </span>Creating the model<a class="headerlink" href="#creating-the-model" title="Link to this heading">#</a></h2>
-<p>To get started, we first need a neural network. We always assume a fully
-connected feed-forward neural network with ReLU activation layers.</p>
+<p>To get started, we first need a neural network. We always assume a ReLU-FNN, a
+fully connected feed-forward neural network with ReLU activation layers .</p>
 <p>We create a simple network with the following properties:</p>
 <ul class="simple">
 <li><p>1 input neuron</p></li>
@@ -663,10 +663,10 @@ eval_j := ReLU(b(out_j) + \Sigma_{x:E(x,out_j)} w(x,out_j) \cdot t_{l}(x))
 <p>Where <span class="math notranslate nohighlight">\(l\)</span> is the number of the last hidden layer.</p>
 </li>
 </ul>
-<p>We will now translate this term into a SQL query. Keep in mind that the paper
-assumes the number of layers <span class="math notranslate nohighlight">\(l\)</span> is known. For this reason, we will explicitly
-not use SQL’s recursive capabilities in this stage and instead build the query
-manually. We’ll discuss recursion in a later chapter.</p>
+<p>We translate this term into a SQL query. Keep in mind that the paper assumes the
+number of layers <span class="math notranslate nohighlight">\(l\)</span> is known. We will explicitly refrain from using SQL’s
+recursive capabilities in this stage and instead build the query manually. We’ll
+switch to recursion in a later chapter.</p>
 <p>The full query is given here:</p>
 <div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">WITH</span><span class="w"> </span><span class="n">input_values</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
 <span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="err">$</span><span class="n">val1</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">input_value</span>
@@ -1006,7 +1006,7 @@ adapt our query accordingly.</p>
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">0. Intro</p>
+        <p class="prev-next-title">0. Introduction</p>
       </div>
     </a>
     <a class="right-next"

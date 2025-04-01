@@ -171,7 +171,7 @@
         <ul class="nav bd-sidenav bd-sidenav__home-link">
             <li class="toctree-l1">
                 <a class="reference internal" href="intro.html">
-                    0. Intro
+                    0. Introduction
                 </a>
             </li>
         </ul>
@@ -793,7 +793,7 @@ method.</p>
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sine_model</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">ReLUFNN</span><span class="p">(</span><span class="n">input_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">output_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">hidden_size</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">num_hidden_layers</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="c1"># If this file does not exist, run the preparation notebook of the demo app.</span>
-<span class="n">sine_model</span><span class="o">.</span><span class="n">load_state_dict</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;../demo-app/models/pwl_geometric_sine.pt&quot;</span><span class="p">,</span> <span class="n">weights_only</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+<span class="n">sine_model</span><span class="o">.</span><span class="n">load_state_dict</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;../mnist-showcase-app/models/pwl_geometric_sine.pt&quot;</span><span class="p">,</span> <span class="n">weights_only</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
 <span class="n">sine_model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
 
 <span class="n">x_train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">10000</span><span class="p">)</span>
@@ -812,39 +812,7 @@ method.</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">FileNotFoundError</span><span class="g g-Whitespace">                         </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">19</span><span class="p">],</span> <span class="n">line</span> <span class="mi">3</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="n">sine_model</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">ReLUFNN</span><span class="p">(</span><span class="n">input_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">output_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">hidden_size</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">num_hidden_layers</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="c1"># If this file does not exist, run the preparation notebook of the demo app.</span>
-<span class="ne">----&gt; </span><span class="mi">3</span> <span class="n">sine_model</span><span class="o">.</span><span class="n">load_state_dict</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;../demo-app/models/pwl_geometric_sine.pt&quot;</span><span class="p">,</span> <span class="n">weights_only</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="n">sine_model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
-<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="n">x_train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">10000</span><span class="p">)</span>
-
-<span class="nn">File ~/Projects/Uni/uh-master-thesis-artifact/notebooks/venv/lib/python3.10/site-packages/torch/serialization.py:1319,</span> in <span class="ni">load</span><span class="nt">(f, map_location, pickle_module, weights_only, mmap, **pickle_load_args)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1316</span> <span class="k">if</span> <span class="s2">&quot;encoding&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">pickle_load_args</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-<span class="g g-Whitespace">   </span><span class="mi">1317</span>     <span class="n">pickle_load_args</span><span class="p">[</span><span class="s2">&quot;encoding&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;utf-8&quot;</span>
-<span class="ne">-&gt; </span><span class="mi">1319</span> <span class="k">with</span> <span class="n">_open_file_like</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">opened_file</span><span class="p">:</span>
-<span class="g g-Whitespace">   </span><span class="mi">1320</span>     <span class="k">if</span> <span class="n">_is_zipfile</span><span class="p">(</span><span class="n">opened_file</span><span class="p">):</span>
-<span class="g g-Whitespace">   </span><span class="mi">1321</span>         <span class="c1"># The zipfile reader is going to advance the current file position.</span>
-<span class="g g-Whitespace">   </span><span class="mi">1322</span>         <span class="c1"># If we want to actually tail call to torch.jit.load, we need to</span>
-<span class="g g-Whitespace">   </span><span class="mi">1323</span>         <span class="c1"># reset back to the original position.</span>
-<span class="g g-Whitespace">   </span><span class="mi">1324</span>         <span class="n">orig_position</span> <span class="o">=</span> <span class="n">opened_file</span><span class="o">.</span><span class="n">tell</span><span class="p">()</span>
-
-<span class="nn">File ~/Projects/Uni/uh-master-thesis-artifact/notebooks/venv/lib/python3.10/site-packages/torch/serialization.py:659,</span> in <span class="ni">_open_file_like</span><span class="nt">(name_or_buffer, mode)</span>
-<span class="g g-Whitespace">    </span><span class="mi">657</span> <span class="k">def</span> <span class="nf">_open_file_like</span><span class="p">(</span><span class="n">name_or_buffer</span><span class="p">,</span> <span class="n">mode</span><span class="p">):</span>
-<span class="g g-Whitespace">    </span><span class="mi">658</span>     <span class="k">if</span> <span class="n">_is_path</span><span class="p">(</span><span class="n">name_or_buffer</span><span class="p">):</span>
-<span class="ne">--&gt; </span><span class="mi">659</span>         <span class="k">return</span> <span class="n">_open_file</span><span class="p">(</span><span class="n">name_or_buffer</span><span class="p">,</span> <span class="n">mode</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">660</span>     <span class="k">else</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">661</span>         <span class="k">if</span> <span class="s2">&quot;w&quot;</span> <span class="ow">in</span> <span class="n">mode</span><span class="p">:</span>
-
-<span class="nn">File ~/Projects/Uni/uh-master-thesis-artifact/notebooks/venv/lib/python3.10/site-packages/torch/serialization.py:640,</span> in <span class="ni">_open_file.__init__</span><span class="nt">(self, name, mode)</span>
-<span class="g g-Whitespace">    </span><span class="mi">639</span> <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">mode</span><span class="p">):</span>
-<span class="ne">--&gt; </span><span class="mi">640</span>     <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">mode</span><span class="p">))</span>
-
-<span class="ne">FileNotFoundError</span>: [Errno 2] No such file or directory: &#39;../demo-app/models/pwl_geometric_sine.pt&#39;
-</pre></div>
-</div>
+<img alt="_images/cf0ee7b31a93874e1f58a2ec818a83d0c441828b7432f4a36d39f02401e2325e.png" src="_images/cf0ee7b31a93874e1f58a2ec818a83d0c441828b7432f4a36d39f02401e2325e.png" />
 </div>
 </div>
 <p>We can see that the model approximates a sine function – at least, on the range
@@ -998,9 +966,9 @@ presentation of it.</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2025-03-24 16:57:53.643476: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:485] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
-2025-03-24 16:57:53.735596: E external/local_xla/xla/stream_executor/cuda/cuda_dnn.cc:8454] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
-2025-03-24 16:57:53.759078: E external/local_xla/xla/stream_executor/cuda/cuda_blas.cc:1452] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2025-04-01 21:59:24.172022: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:485] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
+2025-04-01 21:59:24.267127: E external/local_xla/xla/stream_executor/cuda/cuda_dnn.cc:8454] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
+2025-04-01 21:59:24.291889: E external/local_xla/xla/stream_executor/cuda/cuda_blas.cc:1452] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING:tensorflow:From /home/mark/Projects/Uni/uh-master-thesis-artifact/notebooks/venv/lib/python3.10/site-packages/tensorflow/python/compat/v2_compat.py:98: disable_resource_variables (from tensorflow.python.ops.resource_variables_toggle) is deprecated and will be removed in a future version.
@@ -1325,7 +1293,9 @@ that the sine function is +/- <span class="math notranslate nohighlight">\(f(x) 
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>unsat
-unsat
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>unsat
 </pre></div>
 </div>
 </div>
@@ -1360,9 +1330,11 @@ unsat
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>sat
 input 0 = 1.1211126346155684
 output 0 = 0.9192756190714626
-sat
-input 0 = -1.1153027680741503
-output 0 = -0.9153027680741501
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>sat
+input 0 = -1.1153027680741496
+output 0 = -0.9153027680741495
 </pre></div>
 </div>
 </div>

@@ -57,6 +57,9 @@
     <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script type="application/vnd.jupyter.widget-state+json">{"state": {"b7438240e0d240448a82c2c3e41a3e69": {"model_name": "ProgressStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "ProgressStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "StyleView", "bar_color": "black", "description_width": ""}}, "8822bc006c48453eab15a023ee11b9d3": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": "auto"}}, "c533545a34a341c197a44ce7c9fce02d": {"model_name": "FloatProgressModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "FloatProgressModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "2.0.0", "_view_name": "ProgressView", "bar_style": "", "description": "", "description_allow_html": false, "layout": "IPY_MODEL_8822bc006c48453eab15a023ee11b9d3", "max": 100.0, "min": 0.0, "orientation": "horizontal", "style": "IPY_MODEL_b7438240e0d240448a82c2c3e41a3e69", "tabbable": null, "tooltip": null, "value": 100.0}}}, "version_major": 2, "version_minor": 0}</script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script crossorigin="anonymous" data-jupyter-widgets-cdn="https://cdn.jsdelivr.net/npm/" src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@1.0.6/dist/embed-amd.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '4.1 Saliency';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -169,7 +172,7 @@
         <ul class="nav bd-sidenav bd-sidenav__home-link">
             <li class="toctree-l1">
                 <a class="reference internal" href="intro.html">
-                    0. Intro
+                    0. Introduction
                 </a>
             </li>
         </ul>
@@ -423,7 +426,7 @@ should, theoretically, result in the even-indexed inputs to not contribute anyth
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;duckdb.duckdb.DuckDBPyConnection at 0x72c2b9df2bb0&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;duckdb.duckdb.DuckDBPyConnection at 0x7984380c42f0&gt;
 </pre></div>
 </div>
 </div>
@@ -484,9 +487,9 @@ see if an <code class="docutils literal notranslate"><span class="pre">eval</spa
 │ input_set_id │       value        │  id   │
 │    int32     │       double       │ int32 │
 ├──────────────┼────────────────────┼───────┤
-│            0 │  3.980904496114194 │   511 │
-│            1 │  4.833184254184152 │   511 │
-│            2 │  22.50172564542299 │   511 │
+│            0 │  3.980904496114195 │   511 │
+│            1 │  4.833184254184153 │   511 │
+│            2 │ 22.501725645422987 │   511 │
 │            3 │ 110.39291306779968 │   511 │
 └──────────────┴────────────────────┴───────┘
 </pre></div>
@@ -523,16 +526,16 @@ nodes instead of the hidden nodes.</p>
 │ input_set_id │ i_to_remove │ output_id │       saliency       │
 │    int32     │    int32    │   int32   │        double        │
 ├──────────────┼─────────────┼───────────┼──────────────────────┤
-│            0 │           1 │       511 │  0.16005946526054915 │
-│            0 │           2 │       511 │   0.6701696022449539 │
-│            0 │           3 │       511 │  0.10351041003985761 │
+│            0 │           1 │       511 │   0.1600594652605496 │
+│            0 │           2 │       511 │   0.6701696022449535 │
+│            0 │           3 │       511 │   0.1035104100398585 │
 │            0 │           4 │       511 │   0.7613947272728097 │
-│            0 │           5 │       511 │  0.02848658866034892 │
+│            0 │           5 │       511 │  0.02848658866034981 │
 │            0 │           6 │       511 │   0.7362538524272311 │
 │            0 │           7 │       511 │ 0.009439831667148013 │
-│            0 │           8 │       511 │   0.7190573414185231 │
+│            0 │           8 │       511 │   0.7190573414185226 │
 │            0 │           9 │       511 │  0.01805737739097868 │
-│            0 │          10 │       511 │   0.5808162395130965 │
+│            0 │          10 │       511 │    0.580816239513096 │
 ├──────────────┴─────────────┴───────────┴──────────────────────┤
 │ 10 rows                                             4 columns │
 └───────────────────────────────────────────────────────────────┘
@@ -601,7 +604,7 @@ before, so <code class="docutils literal notranslate"><span class="pre">mnist_cn
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;duckdb.duckdb.DuckDBPyConnection at 0x72c22f8437b0&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;duckdb.duckdb.DuckDBPyConnection at 0x798325956af0&gt;
 </pre></div>
 </div>
 </div>
@@ -761,13 +764,13 @@ query.</p>
 <div class="cell_output docutils container">
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[(0, -10.184259133986917, 31761),
  (0, -9.0520149559364, 31762),
- (0, 5.659585574770498, 31763),
- (0, -18.476813882845715, 31764),
+ (0, 5.659585574770499, 31763),
+ (0, -18.47681388284572, 31764),
  (0, -16.059401620413638, 31765),
  (0, -24.803477576146836, 31766),
- (0, -10.411626972769492, 31767),
- (0, -18.65623944292892, 31768),
- (0, -17.67492451204642, 31769),
+ (0, -10.41162697276949, 31767),
+ (0, -18.656239442928925, 31768),
+ (0, -17.674924512046424, 31769),
  (0, -25.615674505490393, 31770)]
 </pre></div>
 </div>
@@ -831,7 +834,7 @@ query.</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_33167/2420686613.py:6: UserWarning: Creating a tensor from a list of numpy.ndarrays is extremely slow. Please consider converting the list to a single numpy.ndarray with numpy.array() before converting to a tensor. (Triggered internally at ../torch/csrc/utils/tensor_new.cpp:278.)
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_76237/2420686613.py:6: UserWarning: Creating a tensor from a list of numpy.ndarrays is extremely slow. Please consider converting the list to a single numpy.ndarray with numpy.array() before converting to a tensor. (Triggered internally at ../torch/csrc/utils/tensor_new.cpp:278.)
   result = model(torch.tensor([np.array(img)], dtype=torch.float32))
 </pre></div>
 </div>
@@ -861,36 +864,34 @@ create an input set for each pixel, each time with that pixel missing from it.</
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#results = db.con.execute(eval_query).fetchall()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">results</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">con</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">eval_query</span><span class="p">)</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "c533545a34a341c197a44ce7c9fce02d"}</script></div>
 </div>
 <p>This takes a while (~1m on 16GB RAM, 16 CPU machine), but we do get our
 results. We now have to massage this in python to get the saliency image.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="k">script</span> echo &quot;skip&quot;
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">diffs</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">max_actual</span> <span class="o">=</span> <span class="nb">max</span><span class="p">([</span><span class="n">x</span><span class="o">.</span><span class="n">item</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">og_result</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
 
-diffs = []
-max_actual = max([x.item() for x in og_result[0]])
+<span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">g</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+    <span class="n">values</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">g</span><span class="p">)</span>
+    <span class="n">max_value</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
+    <span class="n">diffs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">max_value</span> <span class="o">-</span> <span class="n">max_actual_sql</span><span class="p">))</span>
 
-for k,g in itertools.groupby(results, lambda x: x[0]):
-    values = map(lambda x: x[1], g)
-    max_value = max(values)
-    diffs.append(abs(max_value - max_actual_sql))
-
-plt.imshow(np.array(diffs).reshape(image_np.shape), cmap=&#39;jet&#39;)
-plt.axis(&#39;off&#39;)
-plt.title(f&quot;Label: {label}&quot;)
-plt.show()
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">diffs</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">image_np</span><span class="o">.</span><span class="n">shape</span><span class="p">),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;jet&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Label: </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>skip
-</pre></div>
-</div>
+<img alt="_images/002da331b87c6b7513efc66f83a004469ac99eb4d3dc1b3dfe1ffcbb10a52c13.png" src="_images/002da331b87c6b7513efc66f83a004469ac99eb4d3dc1b3dfe1ffcbb10a52c13.png" />
 </div>
 </div>
 </section>
